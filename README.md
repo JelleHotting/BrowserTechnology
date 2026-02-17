@@ -3,6 +3,20 @@ Een schoolopdracht waar het doel is om een belastingformulier te maken in de hui
 
 # Sprint 1
 
+## Leerdoelen 
+- Samenwerken met code
+    - Ik wil effectief samenwerken met Git (branches, pull requests en code reviews), zodat we veilig en duidelijk kunnen bouwen aan dezelfde codebase.
+    - *Reden: Dit is essentieel voor professionele softwareontwikkeling en teamwork.*
+
+- CSS Animaties & Keyframes
+    - Ik wil complexe CSS animaties en keyframes kunnen ontwerpen, zodat ik interactieve, duidelijke micro-interacties en state-changes kan bouwen.
+    - *Reden: Animaties verbeteren de gebruikerservaring en maken interfaces intuïtiever.*
+
+- Responsive & Semantiek
+    - Ik wil een toegankelijke en responsive interface bouwen met semantische HTML, goede contrasten en duidelijke navigatie, zodat mijn projecten bruikbaar zijn op elk device.
+    - *Reden: Accessibility en responsiveness zorgen voor inclusieve, gebruiksvriendelijke websites.*
+
+
 ## Dag 1
 
 ### Wat heb ik gedaan vandaag?
@@ -44,7 +58,26 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 ![Onleesbaar](https://tonsky.me/blog/tahoe-icons/details_window@2x.webp?t=1769953823)
 ### Wat ga ik morgen doen?
 
-- [ ] Progressive disclosure toevoegen
-- [ ] Styling fixen voor de fieldset figure
+- [x] Progressive disclosure toevoegen
+- [x] Styling fixen voor de fieldset figure
 
 ---
+
+## Dag 2
+
+### Wat heb ik gedaan vandaag? 
+
+| Activiteit | Duur |
+|------------|------|
+| Styling mooier gemaakt en navigatie toegevoegd| 4 uur |
+| Javascript toeveoegen voor progressive disclosure | 3,5 uur |
+| Pauze | 30 min |
+
+### Wat heb ik geleerd? 
+
+* Hoe je een radiobutton styled door hem weg te halen en de styling op het label uit te voeren
+* Dat accessibility belangrijk is bij custom form controls :focus state etc
+
+### Wat ga ik morgen doen?
+
+- [ ] CSS (volgende opdracht)
