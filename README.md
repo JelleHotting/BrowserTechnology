@@ -1,6 +1,9 @@
 # BrowserTechnology
 Een schoolopdracht waar het doel is om een belastingformulier te maken in de huisstijl van NS
 
+> [!CAUTION]
+> DIT IS EEN SCHOOLPROJECT
+
 # Sprint 1
 
 ## Leerdoelen 
