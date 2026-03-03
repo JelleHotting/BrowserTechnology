@@ -83,7 +83,7 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 
 ### Wat ga ik morgen doen?
 
-- [ ] CSS (volgende opdracht)
+- [x] CSS (volgende opdracht)
   
 ## Feedback (dag 3)
 
@@ -121,11 +121,32 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 
 ### Wat ga ik morgen doen?
 
-- [ ] Validatie toevoegen met duidelijke teksten
+- [x] Validatie toevoegen met duidelijke teksten
 
 ### Weekly Geek
 
 [Link naar CodePen](https://codepen.io/JelleHotting/pen/xbEwPMy?editors=1111)
+
+## Dag 5
+
+### Wat heb ik gedaan vandaag? 
+
+| Activiteit | Duur |
+|------------|------|
+| Div styling | 2 uur |
+| Error handeling| 5  uur |
+| Ping-pong | 2 uur |
+
+### Wat heb ik geleerd? 
+
+* Hoe je een div kan stylen als een textbox input
+* Hoe de elfproef werkt en hoe je deze kan implementeren in JavaScript
+* Hoe je een formulier valideert en errors toont aan de gebruiker
+* Hoe je een onzichtbaar veld in een formulier kan zetten en die niet required maken
+
+### Wat ga ik moregn doen?
+- [x] CSS to the rescue
+
 
 
 

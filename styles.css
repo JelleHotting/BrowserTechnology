@@ -4,6 +4,20 @@
   --ns-gray: #f5f5f5;
   --ns-gray-dark: #666;
   --ns-border: #ddd;
+
+  /* Validatie kleuren */
+  --validation-success-bg: #d4edda;
+  --validation-success-text: #155724;
+  --validation-success-border: #c3e6cb;
+  --validation-success-input: #28a745;
+
+  --validation-error-bg: #f8d7da;
+  --validation-error-text: #721c24;
+  --validation-error-border: #f5c6cb;
+  --validation-error-input: #dc3545;
+
+  --validation-error-bg-input: #fff8f8;
+  --validation-success-bg-input: #f8fff9;
 }
 
 * {
@@ -11,11 +25,7 @@
 }
 
 body {
-  font-family:
-    "NS Sans",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
+  font-family: "NS Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   color: var(--ns-blue);
   background-color: #fff;
@@ -29,6 +39,7 @@ h1 {
   font-weight: 700;
   font-size: 28px;
 }
+
 hr {
   border: none;
   background-color: var(--ns-yellow);
@@ -37,21 +48,16 @@ hr {
   margin: 3rem 1em;
 }
 
-.backbutton {
+.back-button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
 }
 
-.noStyling {
-  all: unset;
-  cursor: pointer;
-}
-
 .noStyling:hover {
   text-decoration: underline;
-  background-color: #ffffff;
+  background-color: #fff;
 }
 
 .head-nav {
@@ -71,17 +77,17 @@ nav button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: transparent;
+  background: transparent;
   font-size: 14px;
   font-weight: 400;
+  cursor: pointer;
+}
 
-  :hover {
-    background-color: transparent;
-  }
+nav button:hover {
+  background: transparent;
 }
 
 nav button:nth-of-type(2) {
-  font-size: 20px;
   font-size: 16px;
   font-weight: 700;
 }
@@ -97,6 +103,9 @@ main {
 
 .alert-section {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   background-color: var(--ns-yellow);
   color: var(--ns-blue);
   padding: 0.75rem;
@@ -105,10 +114,6 @@ main {
   text-align: center;
   margin-bottom: 1.5rem;
   font-size: 14px;
-
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
 }
 
 form {
@@ -117,7 +122,7 @@ form {
 }
 
 fieldset {
-  border: 0px solid var(--ns-border);
+  border: 0;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -127,7 +132,7 @@ legend {
   font-weight: 600;
   color: var(--ns-blue);
   padding: 0 1.5rem;
-  margin: 0 -1.5rem 1rem -1.5rem;
+  margin: 0 -1.5rem 1rem;
   display: block;
   width: calc(100% + 3rem);
 }
@@ -141,7 +146,8 @@ label {
 }
 
 label.required span::after,
-legend.required span::after {
+legend.required span::after,
+label:has(input[required]) span::after {
   content: "*";
   color: #d32f2f;
 }
@@ -166,11 +172,12 @@ label:has(input[type="radio"]) {
   margin-bottom: 1rem;
 }
 
-label:has(input[type="radio"]):hover {
-  border-color: var(--ns-blue);
-}
+label:has(input[type="radio"]):hover,
 label:has(input[type="radio"]:checked) {
   border-color: var(--ns-blue);
+}
+
+label:has(input[type="radio"]:checked) {
   background-color: rgba(0, 48, 130, 0.04);
   font-weight: 600;
 }
@@ -202,23 +209,40 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+.field-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
 
-/* Voorletter */
+.field-row label {
+  flex: 1;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.field-row label:has(input.initial) {
+  flex: 2;
+}
+
+.field-row label:has(input.prefix) {
+  flex: 3;
+}
+
+.field-row label:has(input.lastname) {
+  flex: 10;
+}
+
+.hint svg {
+  vertical-align: middle;
+  width: 14px;
+  height: 14px;
+}
 
 input[type="text"].initial {
-  width: 180px;
   text-transform: uppercase;
 }
-
-/* Voorletter */
-
-input[type="text"].prefix {
-  width: 200px;
-}
-
-
-
-
 
 input[type="text"]:focus,
 input[type="number"]:focus,
@@ -244,61 +268,46 @@ button:hover {
   background-color: #ffb000;
 }
 
-/* Tablet and larger screens */
+button[type="submit"] {
+  display: block;
+  margin-left: auto;
+}
+
 @media (min-width: 768px) {
   body {
     font-size: 16px;
     padding: 1.5rem;
   }
-
-  .alert-section {
+  .alert-section,
+  button {
     font-size: 16px;
   }
-
   legend {
     font-size: 20px;
   }
-
-  label {
-    font-size: 16px;
-  }
-
+  label,
   input[type="text"],
   input[type="number"],
   input[type="date"] {
-    font-size: 16px;
-  }
-
-  button {
     font-size: 16px;
   }
 }
 
-/* Desktop screens */
 @media (min-width: 1024px) {
   body {
     font-size: 18px;
   }
-
-  .alert-section {
+  .alert-section,
+  button {
     font-size: 18px;
   }
-
   legend {
     font-size: 22px;
   }
-
-  label {
-    font-size: 18px;
-  }
-
+  label,
   input[type="text"],
   input[type="number"],
   input[type="date"] {
-    font-size: 18px;
-  }
-
-  button {
     font-size: 18px;
   }
 }
@@ -307,65 +316,60 @@ button:hover {
   display: none;
 }
 
-
-/* Marital Status: ja → show marital-agreement */
 .marital-status:has(input[value="ja"]:checked) ~ .marital-agreement {
   display: block;
 }
 
-/* Marital Status: nee → show children-info directly */
 .marital-status:has(input[value="nee"]:checked) ~ .children-info {
   display: block;
 }
 
-/* Marital Agreement: nee → show final-settlement only */
-.marital-agreement:has(input[value="nee"]:checked) ~ .final-settlement {
+.marital-agreement .file-picker,
+.marital-agreement label[for="maritalAgreementDate"],
+.marital-agreement #maritalAgreementDate {
+  display: none;
+}
+
+.marital-agreement:has(input[value="ja"]:checked) .file-picker,
+.marital-agreement:has(input[value="ja"]:checked) label[for="maritalAgreementDate"],
+.marital-agreement:has(input[value="ja"]:checked) #maritalAgreementDate {
   display: block;
 }
 
-/* Marital Agreement: ja → show both final-settlement AND marital-agreement-files */
-.marital-agreement:has(input[value="ja"]:checked) ~ .final-settlement,
-.marital-agreement:has(input[value="ja"]:checked) ~ .marital-agreement-files {
+.marital-agreement:has(input[value="nee"]:checked) ~ .final-settlement,
+.marital-agreement:has(input[value="ja"]:checked) ~ .final-settlement {
   display: block;
 }
 
-/* Final Settlement: any selection → show children-info */
 .final-settlement:has(input[name="finalSettlement"]:checked) ~ .children-info {
   display: block;
 }
 
-/* Children: ja → show deceased-child-info */
 .children-info:has(input[value="ja"]:checked) ~ .deceased-child-info {
   display: block;
 }
 
-/* Children: nee → show testament-info */
 .children-info:has(input[value="nee"]:checked) ~ .testament-info {
   display: block;
 }
 
-/* Deceased Child: ja → show grandchildren-info */
 .deceased-child-info:has(input[value="ja"]:checked) ~ .grandchildren-info {
   display: block;
 }
 
-/* Deceased Child: nee → show testament-info */
 .deceased-child-info:has(input[value="nee"]:checked) ~ .testament-info {
   display: block;
 }
 
-/* Grandchildren: any selection → show testament-info */
 .grandchildren-info:has(input[name="deceasedChildGrandchildren"]:checked)
   ~ .testament-info {
   display: block;
 }
 
-/* Testament: ja → show notary-info */
 .testament-info:has(input[value="ja"]:checked) ~ .notary-info {
   display: block;
 }
 
-/* File Picker Styling */
 .file-picker {
   margin-bottom: 1.5rem;
 }
@@ -458,24 +462,61 @@ button:hover {
   transform: scale(0.95);
 }
 
-/* Tablet and larger screens */
 @media (min-width: 768px) {
   .file-picker-label {
     font-size: 16px;
   }
-
   .file-name {
     font-size: 14px;
   }
 }
 
-/* Desktop screens */
 @media (min-width: 1024px) {
-  .file-picker-label {
-    font-size: 16px;
-  }
-
   .file-name {
     font-size: 16px;
   }
+}
+
+/* Validatie feedback styles */
+.validation-feedback {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.validation-feedback.valid {
+  background-color: var(--validation-success-bg);
+  color: var(--validation-success-text);
+  border: 1px solid var(--validation-success-border);
+}
+
+.validation-feedback.invalid {
+  background-color: var(--validation-error-bg);
+  color: var(--validation-error-text);
+  border: 1px solid var(--validation-error-border);
+}
+
+/* Input styling bij validatie */
+input.input-valid {
+  border: 2px solid var(--validation-success-input);
+  background-color: var(--validation-success-bg-input);
+}
+
+input.input-invalid {
+  border: 2px solid var(--validation-error-input);
+  background-color: var(--validation-error-bg-input);
 }
