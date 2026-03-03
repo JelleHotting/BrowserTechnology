@@ -84,3 +84,48 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 ### Wat ga ik morgen doen?
 
 - [ ] CSS (volgende opdracht)
+  
+## Feedback (dag 3)
+
+### Positieve punten (+)
+
+- **Styling**: Hele exacte styling, het ziet er erg goed en "clean" uit.
+- **Details**: Leuk detail met het icoontje.
+- **Logica**: Er is al goed nagedacht over de logica en de werking van het formulier.
+- **Creativiteit**: De extra vraag met de upload-optie is heel slim en goed bedacht.
+
+### Verbeterpunten & Vragen (-)
+
+- **Progressive Enhancement (PE)**: De progressive enhancement is nog niet sterk; zonder JavaScript werkt de pagina momenteel niet.
+- **Semantiek & Toegankelijkheid**: Denk goed na over de semantiek en toegankelijkheid (A11y). Is hier al specifiek naar gekeken?
+- **Prioritering**: Denk goed na over wat echt belangrijk is. Bijvoorbeeld: 'required' velden zijn essentieel voor de belasting/verwerking.
+- **Layout & UX**: Maak op desktop meer gebruik van de beschikbare ruimte. Stel velden die verplicht zijn alvast in als required. Hierdoor kun je de lay-out met Progressive Enhancement beter uitdenken.
+
+
+## Dag 4 
+
+### Wat heb ik gedaan vandaag? 
+
+| Activiteit | Duur |
+|------------|------|
+| Workshop over validatie en introductie| 2 uur |
+| Progressive disclosure werkend gemaakt in css | 4 uur |
+| De * in de after gezet, dit was echt boem moeilijk | 1  uur |
+| Pauze | 1 uur |
+
+### Wat heb ik geleerd? 
+
+* Hoe je een asteriks op de after van een label zet als de input ook in de label staat (dmv een span)
+* Validatie in HTML5 (waar mogelijk)
+* Hoe je doormiddel van :has in css progressive disclosure toevoegt
+
+### Wat ga ik morgen doen?
+
+- [ ] Validatie toevoegen met duidelijke teksten
+
+### Weekly Geek
+
+[Link naar CodePen](https://codepen.io/JelleHotting/pen/xbEwPMy?editors=1111)
+
+
+

@@ -38,24 +38,20 @@ hr {
 }
 
 .backbutton {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .noStyling {
   all: unset;
   cursor: pointer;
-
-
-
 }
 
 .noStyling:hover {
   text-decoration: underline;
-     background-color: #ffffff;
-
+  background-color: #ffffff;
 }
 
 .head-nav {
@@ -64,7 +60,6 @@ hr {
   align-items: center;
   padding: 1rem;
   border-bottom: 1px solid var(--ns-border);
-
 }
 
 .head-nav svg {
@@ -85,13 +80,10 @@ nav button {
   }
 }
 
-
-
 nav button:nth-of-type(2) {
   font-size: 20px;
   font-size: 16px;
   font-weight: 700;
-    
 }
 
 nav button svg {
@@ -148,6 +140,21 @@ label {
   font-size: 14px;
 }
 
+label.required span::after,
+legend.required span::after {
+  content: "*";
+  color: #d32f2f;
+}
+
+label input,
+label input[type="text"],
+label input[type="number"],
+label input[type="date"] {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
 label:has(input[type="radio"]) {
   display: flex;
   align-items: center;
@@ -156,6 +163,25 @@ label:has(input[type="radio"]) {
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+label:has(input[type="radio"]):hover {
+  border-color: var(--ns-blue);
+}
+label:has(input[type="radio"]:checked) {
+  border-color: var(--ns-blue);
+  background-color: rgba(0, 48, 130, 0.04);
+  font-weight: 600;
+}
+
+label input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
 }
 
 input[type="text"],
@@ -171,45 +197,28 @@ input[type="date"] {
   transition: border-color 0.2s;
 }
 
-input[type="radio"] {
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  width: 0;
-  height: 0;
-  border: none;
-  background-color: transparent;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-}
-
-label:has(input[type="radio"]):hover {
-  border-color: var(--ns-blue);
-}
-
-label:has(input[type="radio"]:checked) {
-  border-color: var(--ns-blue);
-  background-color: rgba(0, 48, 130, 0.04);
-  font-weight: 600;
-}
-
-
-
-input[type="radio"]:focus + label {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 48, 130, 0.1);
-}
-
 input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;
 }
 
-/* input[type="text"].initial {
-  width: 50px;
+
+/* Voorletter */
+
+input[type="text"].initial {
+  width: 180px;
   text-transform: uppercase;
-} */
+}
+
+/* Voorletter */
+
+input[type="text"].prefix {
+  width: 200px;
+}
+
+
+
+
 
 input[type="text"]:focus,
 input[type="number"]:focus,
@@ -296,6 +305,64 @@ button:hover {
 
 .hidden-fieldset {
   display: none;
+}
+
+
+/* Marital Status: ja → show marital-agreement */
+.marital-status:has(input[value="ja"]:checked) ~ .marital-agreement {
+  display: block;
+}
+
+/* Marital Status: nee → show children-info directly */
+.marital-status:has(input[value="nee"]:checked) ~ .children-info {
+  display: block;
+}
+
+/* Marital Agreement: nee → show final-settlement only */
+.marital-agreement:has(input[value="nee"]:checked) ~ .final-settlement {
+  display: block;
+}
+
+/* Marital Agreement: ja → show both final-settlement AND marital-agreement-files */
+.marital-agreement:has(input[value="ja"]:checked) ~ .final-settlement,
+.marital-agreement:has(input[value="ja"]:checked) ~ .marital-agreement-files {
+  display: block;
+}
+
+/* Final Settlement: any selection → show children-info */
+.final-settlement:has(input[name="finalSettlement"]:checked) ~ .children-info {
+  display: block;
+}
+
+/* Children: ja → show deceased-child-info */
+.children-info:has(input[value="ja"]:checked) ~ .deceased-child-info {
+  display: block;
+}
+
+/* Children: nee → show testament-info */
+.children-info:has(input[value="nee"]:checked) ~ .testament-info {
+  display: block;
+}
+
+/* Deceased Child: ja → show grandchildren-info */
+.deceased-child-info:has(input[value="ja"]:checked) ~ .grandchildren-info {
+  display: block;
+}
+
+/* Deceased Child: nee → show testament-info */
+.deceased-child-info:has(input[value="nee"]:checked) ~ .testament-info {
+  display: block;
+}
+
+/* Grandchildren: any selection → show testament-info */
+.grandchildren-info:has(input[name="deceasedChildGrandchildren"]:checked)
+  ~ .testament-info {
+  display: block;
+}
+
+/* Testament: ja → show notary-info */
+.testament-info:has(input[value="ja"]:checked) ~ .notary-info {
+  display: block;
 }
 
 /* File Picker Styling */
@@ -396,7 +463,7 @@ button:hover {
   .file-picker-label {
     font-size: 16px;
   }
-  
+
   .file-name {
     font-size: 14px;
   }
@@ -407,7 +474,7 @@ button:hover {
   .file-picker-label {
     font-size: 16px;
   }
-  
+
   .file-name {
     font-size: 16px;
   }
