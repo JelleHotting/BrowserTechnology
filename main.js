@@ -1,4 +1,6 @@
-// Fieldset references for smooth scrolling
+// * Hier halen we de belangrijkste stukken van het formulier op.
+// * Dit is nodig zodat we straks de flow kunnen sturen zonder overal opnieuw te zoeken.
+const form = document.querySelector("form");
 const maritalAgreement = document.querySelector(".marital-agreement");
 const finalSettlement = document.querySelector(".final-settlement");
 const childrenInfo = document.querySelector(".children-info");
@@ -6,146 +8,84 @@ const deceasedChildInfo = document.querySelector(".deceased-child-info");
 const grandchildrenInfo = document.querySelector(".grandchildren-info");
 const testamentInfo = document.querySelector(".testament-info");
 const notaryInfo = document.querySelector(".notary-info");
+const VISIBILITY_UPDATE_DELAY = 50;
 
-// Marital Status - CSS shows/hides sections, JS adds smooth scroll
-const maritalStatusInputs = document.querySelectorAll(
-  "input[name=maritalStatus]",
-);
-maritalStatusInputs.forEach((input) => {
-  input.addEventListener("change", (event) => {
-    if (event.target.value === "ja") {
-      setTimeout(
-        () => {
-          maritalAgreement.scrollIntoView({ behavior: "smooth" });
-          if (form) disableHiddenFields(form);
-        },
-        50,
-      );
-    } else if (event.target.value === "nee") {
-      setTimeout(() => {
-        childrenInfo.scrollIntoView({ behavior: "smooth" });
-        if (form) disableHiddenFields(form);
-      }, 50);
+// * Even kort wachten tot de zichtbaarheid van secties goed staat.
+// * Daarna pas scrollen, anders spring je soms naar een verkeerde plek.
+// * Meteen ook hidden velden uitzetten, zodat de validatie clean blijft.
+function scheduleSectionUpdate(targetSection) {
+  setTimeout(() => {
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: "smooth" });
     }
-  });
-});
 
-const maritalAgreementInputs = document.querySelectorAll(
-  "input[name=maritalAgreement]",
-);
-maritalAgreementInputs.forEach((input) => {
-  input.addEventListener("change", (event) => {
-    setTimeout(
-      () => {
-        finalSettlement.scrollIntoView({ behavior: "smooth" });
-        if (form) disableHiddenFields(form);
-      },
-      50,
-    );
-  });
-});
-
-// Final Settlement - CSS shows childrenInfo, JS adds smooth scroll
-const finalSettlementInputs = document.querySelectorAll(
-  "input[name=finalSettlement]",
-);
-finalSettlementInputs.forEach((input) => {
-  input.addEventListener("change", (event) => {
-    setTimeout(() => {
-      childrenInfo.scrollIntoView({ behavior: "smooth" });
-      if (form) disableHiddenFields(form);
-    }, 50);
-  });
-});
-
-// Children - CSS shows/hides sections, JS adds smooth scroll
-const childrenInputs = document.querySelectorAll("input[name=children]");
-childrenInputs.forEach((input) => {
-  input.addEventListener("change", (event) => {
-    if (event.target.value === "ja") {
-      setTimeout(
-        () => {
-          deceasedChildInfo.scrollIntoView({ behavior: "smooth" });
-          if (form) disableHiddenFields(form);
-        },
-        50,
-      );
-    } else if (event.target.value === "nee") {
-      setTimeout(
-        () => {
-          testamentInfo.scrollIntoView({ behavior: "smooth" });
-          if (form) disableHiddenFields(form);
-        },
-        50,
-      );
+    if (form) {
+      disableHiddenFields(form);
     }
-  });
-});
+  }, VISIBILITY_UPDATE_DELAY);
+}
 
-// Deceased Child - CSS shows/hides sections, JS adds smooth scroll
-const deceasedChildInputs = document.querySelectorAll(
-  "input[name=deceasedChild]",
-);
-deceasedChildInputs.forEach((input) => {
-  input.addEventListener("change", (event) => {
-    if (event.target.value === "ja") {
-      setTimeout(
-        () => {
-          grandchildrenInfo.scrollIntoView({ behavior: "smooth" });
-          if (form) disableHiddenFields(form);
-        },
-        50,
-      );
-    } else if (event.target.value === "nee") {
-      setTimeout(
-        () => {
-          testamentInfo.scrollIntoView({ behavior: "smooth" });
-          if (form) disableHiddenFields(form);
-        },
-        50,
-      );
-    }
-  });
-});
+// * Kleine helper om niet steeds dezelfde listener-code te copy-pasten.
+// * Bij een keuze bepalen we direct wat de volgende logische sectie is.
+function bindChoiceScroll(selector, getNextSection) {
+  const inputs = document.querySelectorAll(selector);
 
-// Grandchildren - CSS shows testamentInfo, JS adds smooth scroll
-const grandchildrenInputs = document.querySelectorAll(
-  "input[name=deceasedChildGrandchildren]",
-);
-grandchildrenInputs.forEach((input) => {
-  input.addEventListener("change", (event) => {
-    setTimeout(() => {
-      testamentInfo.scrollIntoView({ behavior: "smooth" });
-      if (form) disableHiddenFields(form);
-    }, 50);
-  });
-});
-
-// Testament - CSS shows/hides notaryInfo, JS adds smooth scroll
-const testamentInputs = document.querySelectorAll("input[name=testament]");
-testamentInputs.forEach((input) => {
-  input.addEventListener("change", (event) => {
-    if (event.target.value === "ja") {
-      setTimeout(() => {
-        notaryInfo.scrollIntoView({ behavior: "smooth" });
-        if (form) disableHiddenFields(form);
-      }, 50);
-    }
-  });
-});
-
-// helper to disable hidden inputs and clear required
-function disableHiddenFields(form) {
-  Array.from(form.elements).forEach(el => {
-    const hidden = el.offsetParent === null;
-    el.disabled = hidden;
-    if (hidden) {
-      el.required = false;
-    }
+  inputs.forEach((input) => {
+    input.addEventListener("change", (event) => {
+      const nextSection = getNextSection(event.target.value);
+      if (nextSection) {
+        scheduleSectionUpdate(nextSection);
+      }
+    });
   });
 }
 
-// File Picker - display selected filename
+// * Dit is de route van het formulier.
+// * Per antwoord sturen we de gebruiker door naar de volgende relevante stap.
+bindChoiceScroll("input[name=maritalStatus]", (value) => {
+  if (value === "ja") return maritalAgreement;
+  if (value === "nee") return childrenInfo;
+  return null;
+});
+
+bindChoiceScroll("input[name=maritalAgreement]", () => finalSettlement);
+bindChoiceScroll("input[name=finalSettlement]", () => childrenInfo);
+
+bindChoiceScroll("input[name=children]", (value) => {
+  if (value === "ja") return deceasedChildInfo;
+  if (value === "nee") return testamentInfo;
+  return null;
+});
+
+bindChoiceScroll("input[name=deceasedChild]", (value) => {
+  if (value === "ja") return grandchildrenInfo;
+  if (value === "nee") return testamentInfo;
+  return null;
+});
+
+bindChoiceScroll("input[name=deceasedChildGrandchildren]", () => testamentInfo);
+
+bindChoiceScroll("input[name=testament]", (value) => {
+  if (value === "ja") return notaryInfo;
+  return null;
+});
+
+// * Even checken welke velden echt zichtbaar zijn voor de gebruiker.
+// * Hidden velden zetten we uit, anders krijg je vage required-errors bij submit.
+// * Dit was de makkelijkste manier om de submit-data relevant te houden.
+function disableHiddenFields(form) {
+  for (const element of form.elements) {
+    const isHidden = element.offsetParent === null;
+    element.disabled = isHidden;
+
+    if (isHidden) {
+      element.required = false;
+    }
+  }
+}
+
+// * Hier pakken we de onderdelen voor upload + bestandsweergave.
+// * Zo kunnen we meteen feedback tonen na het kiezen van een bestand.
 const maritalAgreementFileInput = document.getElementById(
   "maritalAgreementFile",
 );
@@ -154,6 +94,8 @@ const maritalAgreementFileNameDisplay = document.getElementById(
 );
 
 function displayFileInfo() {
+  // * Is er een bestand gekozen? Dan laten we direct zien wat er klaarstaat.
+  // * Inclusief delete-knop, zodat je snel opnieuw kan kiezen.
   if (
     maritalAgreementFileInput.files &&
     maritalAgreementFileInput.files.length > 0
@@ -181,6 +123,7 @@ function displayFileInfo() {
       maritalAgreementFileNameDisplay.querySelector(".file-delete-btn");
     deleteBtn.addEventListener("click", clearFile);
   } else {
+    // * Niks gekozen = ook geen oude info laten staan.
     maritalAgreementFileNameDisplay.innerHTML = "";
     maritalAgreementFileNameDisplay.classList.remove("has-file");
   }
@@ -193,147 +136,149 @@ function clearFile() {
 
 maritalAgreementFileInput.addEventListener("change", displayFileInfo);
 
-// BSN validatie met elfproef
+// * BSN checken we in een paar stappen zodat de gebruiker snelle feedback krijgt.
+// * We geven steeds hetzelfde type resultaat terug, dan blijft de UI simpel.
 function validateBSN(bsn) {
-  const cleanBSN = bsn.replace(/\D/g, '');
-  
-  // Check op 9 cijfers
+  const cleanBSN = bsn.replace(/\D/g, "");
+
+  // * Eerst de snelle basischeck, anders heeft verdere controle weinig zin.
   if (cleanBSN.length !== 9) {
-    return { 
-      valid: false, 
-      message: '❌ BSN moet uit 9 cijfers bestaan' 
+    return {
+      valid: false,
+      message: "❌ BSN moet uit 9 cijfers bestaan",
     };
   }
-  
-  // Elfproef check
+
+  // * Daarna de echte controle om random nummers eruit te filteren.
   let sum = 0;
   for (let i = 0; i < 9; i++) {
     sum += parseInt(cleanBSN[i]) * (9 - i);
   }
-  
+
   if (sum % 11 !== 0) {
-    return { 
-      valid: false, 
-      message: '❌ BSN is ongeldig (BSN bestaat niet)' 
+    return {
+      valid: false,
+      message: "❌ BSN is ongeldig (BSN bestaat niet)",
     };
   }
-  
-  return { 
-    valid: true, 
-    message: '✅ BSN is geldig!' 
+
+  return {
+    valid: true,
+    message: "✅ BSN is geldig!",
   };
 }
 
-// Controleer alleen cijfervelden
-function validateNumberField(value, fieldName = 'Dit veld') {
-  if (value.trim() === '') {
-    return { valid: false, message: `❌ ${fieldName} is verplicht` };
-  }
-  if (!/^\d+$/.test(value.trim())) {
-    return { valid: false, message: `❌ ${fieldName} mag alleen cijfers bevatten` };
-  }
-  return { valid: true, message: `✅ ${fieldName} is correct ingevuld!` };
-}
-
-// Feedback element aanmaken/updaten
+// * Hier tonen we feedback direct onder het veld, da's duidelijker voor de user.
+// * Oude melding eerst weg, zodat je niet meerdere berichten onder elkaar krijgt.
+// * Extra class erbij voor snelle visuele check (groen/rood).
 function showValidationFeedback(inputElement, validation) {
   let feedbackElement = inputElement.nextElementSibling;
-  
-  // Verwijder oude feedback als die er is
-  if (feedbackElement && feedbackElement.classList.contains('validation-feedback')) {
+
+  // * Even oude feedback weggooien voor een nette UI.
+  if (
+    feedbackElement &&
+    feedbackElement.classList.contains("validation-feedback")
+  ) {
     feedbackElement.remove();
   }
-  
-  // Maak nieuwe feedback element
-  const feedback = document.createElement('div');
-  feedback.className = `validation-feedback ${validation.valid ? 'valid' : 'invalid'}`;
+
+  // * Nieuwe feedback opbouwen met status.
+  const feedback = document.createElement("div");
+  feedback.className = `validation-feedback ${validation.valid ? "valid" : "invalid"}`;
   feedback.textContent = validation.message;
-  feedback.setAttribute('role', 'alert');
-  
-  inputElement.parentElement.insertBefore(feedback, inputElement.nextElementSibling);
-  
-  // Voeg klasse toe aan input
-  inputElement.classList.toggle('input-valid', validation.valid);
-  inputElement.classList.toggle('input-invalid', !validation.valid);
+  feedback.setAttribute("role", "alert");
+
+  inputElement.parentElement.insertBefore(
+    feedback,
+    inputElement.nextElementSibling,
+  );
+
+  // * Input ook visueel markeren, dan zie je meteen waar het fout gaat.
+  inputElement.classList.toggle("input-valid", validation.valid);
+  inputElement.classList.toggle("input-invalid", !validation.valid);
 }
 
-// Datum validatie
-function validateDate(dateValue, fieldName = 'Datum') {
+// * Algemene datumcheck die we op meerdere plekken kunnen hergebruiken.
+// * Zo houden we de regels overal hetzelfde.
+function validateDate(dateValue, fieldName = "Datum") {
   if (!dateValue) {
-    return { 
-      valid: false, 
-      message: `❌ ${fieldName} is verplicht` 
+    return {
+      valid: false,
+      message: `❌ ${fieldName} is verplicht`,
     };
   }
-  
+
   const selectedDate = new Date(dateValue);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
-  // Check of datum in toekomst ligt
+
+  // * Even checken: datum in de toekomst is hier niet logisch.
   if (selectedDate > today) {
-    return { 
-      valid: false, 
-      message: `❌ ${fieldName} kan niet in de toekomst liggen` 
+    return {
+      valid: false,
+      message: `❌ ${fieldName} kan niet in de toekomst liggen`,
     };
   }
-  
-  // Check of datum redelijk is (niet voor 1900)
-  const minYear = new Date('1900-01-01');
+
+  // * Ondergrens om typefouten of onrealistische invoer te vangen.
+  const minYear = new Date("1900-01-01");
   if (selectedDate < minYear) {
-    return { 
-      valid: false, 
-      message: `❌ ${fieldName} moet na 1900 liggen` 
+    return {
+      valid: false,
+      message: `❌ ${fieldName} moet na 1900 liggen`,
     };
   }
-  
-  return { 
-    valid: true, 
-    message: `✅ ${fieldName} is geldig!` 
+
+  return {
+    valid: true,
+    message: `✅ ${fieldName} is geldig!`,
   };
 }
 
-// Validatie voor marital agreement date vs overlijdensdatum
-function validateMaritalAgreementDate(maritalDate, deceasedDate) {
-  if (!maritalDate || !deceasedDate) {
-    return { 
-      valid: false, 
-      message: '❌ Beide datums zijn verplicht' 
-    };
-  }
-  
-  const maritalDateObj = new Date(maritalDate);
-  const deceasedDateObj = new Date(deceasedDate);
-  
-  // Huwelijksdatum moet vóór overlijdensdatum liggen
-  if (maritalDateObj >= deceasedDateObj) {
-    return { 
-      valid: false, 
-      message: '❌ Huwelijksdatum moet vóór overlijdensdatum liggen' 
-    };
-  }
-  
-  return { 
-    valid: true, 
-    message: '✅ Datums kloppen!' 
+// * Extra regel tussen 2 datums: de volgorde moet logisch zijn.
+// * Deze check voorkomt tegenstrijdige data in het formulier.function validateMaritalAgreementDate(maritalDate, deceasedDate) {
+if (!maritalDate || !deceasedDate) {
+  return {
+    valid: false,
+    message: "❌ Beide datums zijn verplicht",
   };
 }
 
-// DOM events and wiring for validation
-document.addEventListener('DOMContentLoaded', () => {
-  const bsnField = document.getElementById('bsn-field');
+const maritalDateObj = new Date(maritalDate);
+const deceasedDateObj = new Date(deceasedDate);
+
+// ! Deze check is belangrijk, anders klopt de tijdlijn niet.
+if (maritalDateObj >= deceasedDateObj) {
+  return {
+    valid: false,
+    message: "❌ Huwelijksdatum moet vóór overlijdensdatum liggen",
+  };
+}
+
+return {
+  valid: true,
+  message: "✅ Datums kloppen!",
+};
+
+// * Alles pas koppelen als de pagina klaar is.
+// * Scheelt null-errors omdat de velden dan sowieso bestaan.
+document.addEventListener("DOMContentLoaded", () => {
+  const bsnField = document.getElementById("bsn-field");
   const deceasedDateField = document.querySelector('input[type="date"]');
-  const maritalAgreementDateField = document.getElementById('maritalAgreementDate');
-  const notaryDateField = document.getElementById('notaryDate');
-  const notaryProtocolField = document.getElementById('notaryProtocol');
+  const maritalAgreementDateField = document.getElementById(
+    "maritalAgreementDate",
+  );
+  const notaryDateField = document.getElementById("notaryDate");
+  const notaryProtocolField = document.getElementById("notaryProtocol");
 
-  // BSN field listeners
+  // * BSN direct begeleiden tijdens invullen + checken bij verlaten van het veld.
+  // * Zo corrigeren we input vroeg en voorkomen we gedoe bij submit.
   if (bsnField) {
-    bsnField.addEventListener('input', () => {
-      // only numbers
-      bsnField.value = bsnField.value.replace(/\D/g, '');
+    bsnField.addEventListener("input", () => {
+      // * Hier houden we de invoer alvast schoon.
+      bsnField.value = bsnField.value.replace(/\D/g, "");
     });
-    bsnField.addEventListener('blur', () => {
+    bsnField.addEventListener("blur", () => {
       if (bsnField.value.trim()) {
         const result = validateBSN(bsnField.value);
         showValidationFeedback(bsnField, result);
@@ -341,19 +286,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // deceased date
+  // * Overlijdensdatum pas checken als de gebruiker klaar is met typen.
   if (deceasedDateField) {
-    deceasedDateField.addEventListener('blur', () => {
+    deceasedDateField.addEventListener("blur", () => {
       if (deceasedDateField.value) {
-        const result = validateDate(deceasedDateField.value, 'Overlijdensdatum');
+        const result = validateDate(
+          deceasedDateField.value,
+          "Overlijdensdatum",
+        );
         showValidationFeedback(deceasedDateField, result);
       }
     });
   }
 
-  // marital agreement date
+  // * Deze vergelijking heeft alleen zin als beide datums er zijn.
   if (maritalAgreementDateField) {
-    maritalAgreementDateField.addEventListener('blur', () => {
+    maritalAgreementDateField.addEventListener("blur", () => {
       if (maritalAgreementDateField.value && deceasedDateField?.value) {
         const result = validateMaritalAgreementDate(
           maritalAgreementDateField.value,
@@ -364,29 +312,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // notary date
+  // * Zelfde datumregels hergebruiken voor consistente feedback.
   if (notaryDateField) {
-    notaryDateField.addEventListener('blur', () => {
+    notaryDateField.addEventListener("blur", () => {
       if (notaryDateField.value) {
-        const result = validateDate(notaryDateField.value, 'Datum testament');
+        const result = validateDate(notaryDateField.value, "Datum testament");
         showValidationFeedback(notaryDateField, result);
       }
     });
   }
 
-  // protocol number
+  // * Protocolnummer pas valideren als het veld klaar is.
   if (notaryProtocolField) {
-    notaryProtocolField.addEventListener('blur', () => {
+    notaryProtocolField.addEventListener("blur", () => {
       if (notaryProtocolField.value.trim()) {
-        const result = validateNumberField(notaryProtocolField.value, 'Protocolnummer');
+        const result = validateNumberField(
+          notaryProtocolField.value,
+          "Protocolnummer",
+        );
         showValidationFeedback(notaryProtocolField, result);
       }
     });
   }
 
-  // form submit
+  // ! Laatste safety-check bij submit.
+  // * Alles nog 1x nalopen voor het formulier echt weggaat.
+  // ! Bij fouten blokkeren we submit, anders gaat er rommel door.
   if (form) {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener("submit", (e) => {
       let hasError = false;
 
       if (bsnField?.value) {
@@ -398,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (deceasedDateField?.value) {
-        const check = validateDate(deceasedDateField.value, 'Overlijdensdatum');
+        const check = validateDate(deceasedDateField.value, "Overlijdensdatum");
         if (!check.valid) {
           showValidationFeedback(deceasedDateField, check);
           hasError = true;
@@ -417,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (notaryDateField?.value) {
-        const check = validateDate(notaryDateField.value, 'Datum testament');
+        const check = validateDate(notaryDateField.value, "Datum testament");
         if (!check.valid) {
           showValidationFeedback(notaryDateField, check);
           hasError = true;
@@ -427,7 +380,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hasError) {
         e.preventDefault();
       } else {
-        
       }
     });
   }
