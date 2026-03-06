@@ -83,10 +83,6 @@ nav button {
   cursor: pointer;
 }
 
-nav button:hover {
-  background: transparent;
-}
-
 nav button:nth-of-type(2) {
   font-size: 16px;
   font-weight: 700;

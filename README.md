@@ -147,6 +147,21 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 ### Wat ga ik moregn doen?
 - [x] CSS to the rescue
 
+## Feedback (dag 6)
+
+### Positieve punten (+)
+
+- **Progressive Enhancement**: Nu werkt de pagina ook zonder JavaScript.
+- **Validatie**: Custom error messages zien er mooi uit en BSN validatie werkt zonder JS.
+
+### Verbeterpunten & Vragen (-)
+
+- **Datum**: Zorg dat je überhaupt geen datum uit de toekomst kan invoeren (input level).
+- **BSN Validatie**: Maak de BSN validatie ook werkend in HTML (input level) en niet alleen in JavaScript.
+- **Volgende vraag**: Denk goed na of je de volgende vraag op een aparte HTML pagina wilt zetten of dat je deze op dezelfde pagina wilt houden.
+
+
+
 
 
 

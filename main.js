@@ -6,7 +6,6 @@ const deceasedChildInfo = document.querySelector(".deceased-child-info");
 const grandchildrenInfo = document.querySelector(".grandchildren-info");
 const testamentInfo = document.querySelector(".testament-info");
 const notaryInfo = document.querySelector(".notary-info");
-const form = document.querySelector('form');
 
 // Marital Status - CSS shows/hides sections, JS adds smooth scroll
 const maritalStatusInputs = document.querySelectorAll(
@@ -386,7 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // form submit
-  const form = document.querySelector('form');
   if (form) {
     form.addEventListener('submit', (e) => {
       let hasError = false;
