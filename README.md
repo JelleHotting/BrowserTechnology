@@ -160,6 +160,33 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 - **BSN Validatie**: Maak de BSN validatie ook werkend in HTML (input level) en niet alleen in JavaScript.
 - **Volgende vraag**: Denk goed na of je de volgende vraag op een aparte HTML pagina wilt zetten of dat je deze op dezelfde pagina wilt houden.
 
+## Dag 7
+
+### Wat heb ik gedaan vandaag?
+
+| Activiteit | Duur |
+|------------|------|
+| Form validatie en pattern aanpassingen (BSN naar 9 cijfers) | 1,5 uur |
+| Tooltips voor BSN, bestanden en notaris toegevoegd | 1 uur |
+| Aria-describedby en accessibility verbeteringen | 1,5 uur |
+| File upload UI en submit button verbeteringen | 1,5 uur |
+| Main.js uitgebreid met validators en realtime feedback | 3,5 uur |
+| Pauze | 1 uur |
+
+### Wat heb ik geleerd?
+
+* Hoe je `aria-describedby` gebruik voor betere a11y en tooltips
+* Hoe je design tokens in CSS kan implementeren voor consistentie
+* Hoe je realtime form feedback geeft terwijl de gebruiker typt
+* Hoe je logisch verborgen form velden kan uitschakelen met JavaScript
+* Hoe je novalidate op de form zet en alles zelf regelt
+
+### Wat ga ik morgen doen?
+
+- [ ] Testen met keyboard navigation en screenreaders
+- [ ] User testing en feedback verzamelen
+- [ ] Eventuele refinements op basis van testing
+
 
 
 

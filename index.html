@@ -108,7 +108,7 @@
       <h1>NS Erfbelastingformulier</h1>
 
       <hr />
-      <form action="submit" autocomplete="off">
+      <form action="submit" autocomplete="off" novalidate>
         <fieldset class="deceased-info">
           <legend>Vul hier de gegevens in van de overledene.</legend>
 
@@ -150,28 +150,54 @@
           </div>
           <label class="required">
             <span>BSN</span>
+            <button
+              type="button"
+              class="tooltip-trigger"
+              aria-label="Wat is BSN?"
+              aria-describedby="bsn-tooltip"
+            >
+              <svg
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 7c-.55 0-1.22.11-2 .35l.07.9c.69-.27 1.29-.41 1.83-.41 1.16 0 1.93.67 1.93 1.68 0 .42-.13.9-.41 1.27-.22.3-.45.58-.66.84-.62.77-1.13 1.41-1.17 1.97-.03.38-.04.66-.04.84h.85c0-.71.18-1.27.55-1.81.18-.27.41-.53.65-.8.19-.21.37-.42.54-.64.42-.55.62-1.13.62-1.76 0-1.51-1.11-2.44-2.76-2.44Zm-.57 8.68h1.15v1.18h-1.15z"
+                ></path>
+                <path
+                  d="M19.07 4.93A10.02 10.02 0 0 0 12 2c-1.98 0-3.91.59-5.56 1.69a10 10 0 0 0-3.68 4.49c-.76 1.83-.95 3.84-.57 5.78a10.03 10.03 0 0 0 2.74 5.12c1.4 1.4 3.18 2.35 5.12 2.74s3.95.19 5.78-.57a10.04 10.04 0 0 0 4.49-3.68 10 10 0 0 0 1.69-5.56c0-2.65-1.06-5.19-2.93-7.07Zm-.71 13.43A8.984 8.984 0 0 1 7 19.48a8.96 8.96 0 0 1-3.31-4.04 9 9 0 0 1-.51-5.2c.35-1.75 1.2-3.35 2.46-4.61s2.86-2.12 4.61-2.46a9 9 0 0 1 5.2.51 8.99 8.99 0 0 1 5.56 8.31c0 2.39-.95 4.67-2.64 6.36Z"
+                ></path>
+              </svg>
+            </button>
             <input
               type="text"
               id="bsn-field"
-              minlength="8"
+              minlength="9"
               maxlength="9"
               required
               inputmode="numeric"
-              pattern="[0-9]{8,9}"
-              aria-describedby="bsn-hint"
+              pattern="[0-9]{9}"
+              aria-describedby="bsn-tooltip"
             />
-            <small id="bsn-hint" class="hint">
-<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-			<!--?lit$060863698$--><path d="M19.27 10.7c-.47-.47-1.1-.73-1.77-.73H17V6c0-1.34-.52-2.59-1.46-3.54C14.6 1.52 13.34 1 12 1s-2.59.52-3.54 1.46C7.52 3.4 7 4.66 7 6v3.97h-.5c-.67 0-1.29.26-1.77.73S4 11.8 4 12.47v8c0 .67.26 1.29.73 1.77s1.1.73 1.77.73h11c.67 0 1.29-.26 1.77-.73s.73-1.1.73-1.77v-8c0-.67-.26-1.29-.73-1.77M8 6c0-1.07.42-2.07 1.17-2.83C9.92 2.42 10.93 2 12 2s2.07.42 2.83 1.17S16 4.93 16 6v3.97H8zm11 14.47a1.5 1.5 0 0 1-1.5 1.5h-11a1.5 1.5 0 0 1-1.5-1.5v-8a1.5 1.5 0 0 1 1.5-1.5h11a1.5 1.5 0 0 1 1.5 1.5z"></path>
-		</svg>
-              Het BSN wordt veilig versleuteld en uitsluitend gebruikt voor
-              wettelijke doeleinden.
-            </small>
+            <div id="bsn-tooltip" class="tooltip" role="tooltip">
+              <p><strong>Burgerservicenummer</strong></p>
+              <p>
+                Dit is een uniek nummer van 9 cijfers, persoonlijk voor iedereen
+                in Nederland. Je vindt het op:
+              </p>
+              <ul>
+                <li>Achterkant van je ID-kaart of paspoort</li>
+                <li>Je zorgverzekeringspas</li>
+                <li>Een briefje van de gemeente jaarlijks</li>
+              </ul>
+            </div>
           </label>
 
           <label class="required">
             <span>Overlijdensdatum</span>
-            <input type="date" required />
+            <input id="deceasedDate" type="date" required max="2026-03-09" />
           </label>
         </fieldset>
 
@@ -214,8 +240,12 @@
               class="file-input"
               accept=".pdf,.doc,.docx"
               required
+              aria-describedby="file-format-tooltip"
             />
-            <label for="maritalAgreementFile" class="file-picker-label required">
+            <label
+              for="maritalAgreementFile"
+              class="file-picker-label required"
+            >
               <svg
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"
@@ -225,19 +255,53 @@
               >
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
               </svg>
-              <span class="file-picker-text">Upload notariële akte</span>
+              <span>Upload notariële akte</span>
+              <button
+                type="button"
+                class="tooltip-trigger"
+                aria-label="Welk bestandsformaat?"
+                aria-describedby="file-format-tooltip"
+              >
+                <svg
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 7c-.55 0-1.22.11-2 .35l.07.9c.69-.27 1.29-.41 1.83-.41 1.16 0 1.93.67 1.93 1.68 0 .42-.13.9-.41 1.27-.22.3-.45.58-.66.84-.62.77-1.13 1.41-1.17 1.97-.03.38-.04.66-.04.84h.85c0-.71.18-1.27.55-1.81.18-.27.41-.53.65-.8.19-.21.37-.42.54-.64.42-.55.62-1.13.62-1.76 0-1.51-1.11-2.44-2.76-2.44Zm-.57 8.68h1.15v1.18h-1.15z"
+                  ></path>
+                  <path
+                    d="M19.07 4.93A10.02 10.02 0 0 0 12 2c-1.98 0-3.91.59-5.56 1.69a10 10 0 0 0-3.68 4.49c-.76 1.83-.95 3.84-.57 5.78a10.03 10.03 0 0 0 2.74 5.12c1.4 1.4 3.18 2.35 5.12 2.74s3.95.19 5.78-.57a10.04 10.04 0 0 0 4.49-3.68 10 10 0 0 0 1.69-5.56c0-2.65-1.06-5.19-2.93-7.07Zm-.71 13.43A8.984 8.984 0 0 1 7 19.48a8.96 8.96 0 0 1-3.31-4.04 9 9 0 0 1-.51-5.2c.35-1.75 1.2-3.35 2.46-4.61s2.86-2.12 4.61-2.46a9 9 0 0 1 5.2.51 8.99 8.99 0 0 1 5.56 8.31c0 2.39-.95 4.67-2.64 6.36Z"
+                  ></path>
+                </svg>
+              </button>
             </label>
+            <div id="file-format-tooltip" class="tooltip" role="tooltip">
+              <p><strong>Bestandsformaat</strong></p>
+              <p>Upload je notariële akte als:</p>
+              <ul>
+                <li><strong>PDF</strong> (aanbevolen)</li>
+                <li><strong>DOC</strong> of <strong>DOCX</strong> (Word)</li>
+              </ul>
+              <p><small>Max. 5MB</small></p>
+            </div>
             <div class="file-name" id="maritalAgreementFileName"></div>
           </div>
 
-          <label for="maritalAgreementDate" class="required"><span>Datum huwelijkse of partnerschapsvoorwaarden</span></label>
+          <label for="maritalAgreementDate" class="required"
+            ><span>Datum akte</span></label
+          >
           <input type="date" id="maritalAgreementDate" required />
         </fieldset>
 
-
         <fieldset class="final-settlement hidden-fieldset">
           <legend class="required">
-            <span>Hadden de overledene en diens partner een finaal verrekenbeding?</span>
+            <span
+              >Hadden de overledene en diens partner een finaal
+              verrekenbeding?</span
+            >
           </legend>
           <label>
             <input type="radio" name="finalSettlement" value="nee" required />
@@ -251,7 +315,9 @@
         </fieldset>
 
         <fieldset class="children-info hidden-fieldset">
-          <legend class="required"><span>Had de overledene kinderen?</span></legend>
+          <legend class="required">
+            <span>Had de overledene kinderen?</span>
+          </legend>
           <label>
             <input type="radio" name="children" value="nee" required />
             Nee
@@ -265,8 +331,10 @@
 
         <fieldset class="deceased-child-info hidden-fieldset">
           <legend class="required">
-            <span>Is 1 van deze kinderen eerder overleden dan de overledene voor wie u
-            nu aangifte doet?</span>
+            <span
+              >Is 1 van deze kinderen eerder overleden dan de overledene voor
+              wie u nu aangifte doet?</span
+            >
           </legend>
           <label>
             <input type="radio" name="deceasedChild" value="nee" required />
@@ -280,20 +348,34 @@
         </fieldset>
 
         <fieldset class="grandchildren-info hidden-fieldset">
-          <legend class="required"><span>Had dit overleden kind zelf kinderen?</span></legend>
+          <legend class="required">
+            <span>Had dit kind zelf kinderen?</span>
+          </legend>
           <label>
-            <input type="radio" name="deceasedChildGrandchildren" value="nee" required />
+            <input
+              type="radio"
+              name="deceasedChildGrandchildren"
+              value="nee"
+              required
+            />
             Nee
           </label>
 
           <label>
-            <input type="radio" name="deceasedChildGrandchildren" value="ja" required />
+            <input
+              type="radio"
+              name="deceasedChildGrandchildren"
+              value="ja"
+              required
+            />
             Ja
           </label>
         </fieldset>
 
         <fieldset class="testament-info hidden-fieldset">
-          <legend class="required"><span>Had de overledene een testament?</span></legend>
+          <legend class="required">
+            <span>Had de overledene een testament?</span>
+          </legend>
           <label>
             <input type="radio" name="testament" value="nee" required />
             Nee
@@ -308,30 +390,120 @@
         <fieldset class="notary-info hidden-fieldset">
           <legend>Gegevens notaris</legend>
           <label for="notaryProtocol" class="required">
-            <span>Protocolnummer notaris</span>
-            <input type="number" id="notaryProtocol" required min="0" />
+            <span>Protocolnummer</span>
+            <button
+              type="button"
+              class="tooltip-trigger"
+              aria-label="Wat is een protocolnummer?"
+              aria-describedby="protocol-tooltip"
+            >
+              <svg
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 7c-.55 0-1.22.11-2 .35l.07.9c.69-.27 1.29-.41 1.83-.41 1.16 0 1.93.67 1.93 1.68 0 .42-.13.9-.41 1.27-.22.3-.45.58-.66.84-.62.77-1.13 1.41-1.17 1.97-.03.38-.04.66-.04.84h.85c0-.71.18-1.27.55-1.81.18-.27.41-.53.65-.8.19-.21.37-.42.54-.64.42-.55.62-1.13.62-1.76 0-1.51-1.11-2.44-2.76-2.44Zm-.57 8.68h1.15v1.18h-1.15z"
+                ></path>
+                <path
+                  d="M19.07 4.93A10.02 10.02 0 0 0 12 2c-1.98 0-3.91.59-5.56 1.69a10 10 0 0 0-3.68 4.49c-.76 1.83-.95 3.84-.57 5.78a10.03 10.03 0 0 0 2.74 5.12c1.4 1.4 3.18 2.35 5.12 2.74s3.95.19 5.78-.57a10.04 10.04 0 0 0 4.49-3.68 10 10 0 0 0 1.69-5.56c0-2.65-1.06-5.19-2.93-7.07Zm-.71 13.43A8.984 8.984 0 0 1 7 19.48a8.96 8.96 0 0 1-3.31-4.04 9 9 0 0 1-.51-5.2c.35-1.75 1.2-3.35 2.46-4.61s2.86-2.12 4.61-2.46a9 9 0 0 1 5.2.51 8.99 8.99 0 0 1 5.56 8.31c0 2.39-.95 4.67-2.64 6.36Z"
+                ></path>
+              </svg>
+            </button>
+            <input
+              type="text"
+              id="notaryProtocol"
+              required
+              inputmode="numeric"
+              pattern="[0-9]+"
+              aria-describedby="protocol-tooltip"
+            />
+            <div id="protocol-tooltip" class="tooltip" role="tooltip">
+              <p><strong>Protocolnummer</strong></p>
+              <p>
+                Dit is het referentienummer van het testament of de wijziging.
+                Je vindt het op:
+              </p>
+              <ul>
+                <li>Je kopie van de notariële akte</li>
+                <li>De begeleidende brief van de notaris</li>
+              </ul>
+            </div>
           </label>
 
           <div class="field-row">
             <label>
               <span>Voorletter(s)</span>
-              <input class="initial" type="text" required pattern="[A-Z\.]+" maxlength="8" />
+              <input
+                class="initial"
+                type="text"
+                required
+                pattern="[A-Z\.]+"
+                maxlength="8"
+              />
             </label>
 
             <label for="notaryPrefix">
               Tussenvoegsel
-              <input class="prefix" type="text" id="notaryPrefix" maxlength="15" />
+              <input
+                class="prefix"
+                type="text"
+                id="notaryPrefix"
+                maxlength="15"
+              />
             </label>
 
             <label for="notaryLastname" class="required">
               <span>Achternaam</span>
-              <input class="lastname" type="text" id="notaryLastname" required maxlength="50" />
+              <input
+                class="lastname"
+                type="text"
+                id="notaryLastname"
+                required
+                maxlength="50"
+              />
             </label>
           </div>
 
           <label for="notaryCity" class="required">
-            <span>Vestegingsplaats</span>
-            <input type="text" id="notaryCity" required />
+            <span>Vestigingsplaats</span>
+            <button
+              type="button"
+              class="tooltip-trigger"
+              aria-label="Wat is vestigingsplaats?"
+              aria-describedby="notary-city-tooltip"
+            >
+              <svg
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 7c-.55 0-1.22.11-2 .35l.07.9c.69-.27 1.29-.41 1.83-.41 1.16 0 1.93.67 1.93 1.68 0 .42-.13.9-.41 1.27-.22.3-.45.58-.66.84-.62.77-1.13 1.41-1.17 1.97-.03.38-.04.66-.04.84h.85c0-.71.18-1.27.55-1.81.18-.27.41-.53.65-.8.19-.21.37-.42.54-.64.42-.55.62-1.13.62-1.76 0-1.51-1.11-2.44-2.76-2.44Zm-.57 8.68h1.15v1.18h-1.15z"
+                ></path>
+                <path
+                  d="M19.07 4.93A10.02 10.02 0 0 0 12 2c-1.98 0-3.91.59-5.56 1.69a10 10 0 0 0-3.68 4.49c-.76 1.83-.95 3.84-.57 5.78a10.03 10.03 0 0 0 2.74 5.12c1.4 1.4 3.18 2.35 5.12 2.74s3.95.19 5.78-.57a10.04 10.04 0 0 0 4.49-3.68 10 10 0 0 0 1.69-5.56c0-2.65-1.06-5.19-2.93-7.07Zm-.71 13.43A8.984 8.984 0 0 1 7 19.48a8.96 8.96 0 0 1-3.31-4.04 9 9 0 0 1-.51-5.2c.35-1.75 1.2-3.35 2.46-4.61s2.86-2.12 4.61-2.46a9 9 0 0 1 5.2.51 8.99 8.99 0 0 1 5.56 8.31c0 2.39-.95 4.67-2.64 6.36Z"
+                ></path>
+              </svg>
+            </button>
+            <input
+              type="text"
+              id="notaryCity"
+              required
+              aria-describedby="notary-city-tooltip"
+            />
+            <div id="notary-city-tooltip" class="tooltip" role="tooltip">
+              <p><strong>Vestigingsplaats van de notaris</strong></p>
+              <p>
+                Dit is de plaats waar de notaris kantoor houdt,
+                <strong>niet</strong> jouw woonplaats. Je vindt dit op het
+                notariële document.
+              </p>
+            </div>
           </label>
 
           <label for="notaryDate" class="required">
@@ -339,7 +511,7 @@
             <input type="date" name="notaryDate" id="notaryDate" required />
           </label>
         </fieldset>
-        <button type="submit">Volgende vraag</button>
+        <button type="button" class="next-question-btn">Volgende vraag</button>
       </form>
     </main>
   </body>

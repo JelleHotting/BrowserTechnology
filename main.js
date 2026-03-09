@@ -1,6 +1,8 @@
+
 // * Hier halen we de belangrijkste stukken van het formulier op.
 // * Dit is nodig zodat we straks de flow kunnen sturen zonder overal opnieuw te zoeken.
 const form = document.querySelector("form");
+const submitButton = form?.querySelector('.next-question-btn');
 const maritalAgreement = document.querySelector(".marital-agreement");
 const finalSettlement = document.querySelector(".final-settlement");
 const childrenInfo = document.querySelector(".children-info");
@@ -21,6 +23,7 @@ function scheduleSectionUpdate(targetSection) {
 
     if (form) {
       disableHiddenFields(form);
+      updateSubmitButtonState();
     }
   }, VISIBILITY_UPDATE_DELAY);
 }
@@ -75,13 +78,61 @@ bindChoiceScroll("input[name=testament]", (value) => {
 // * Dit was de makkelijkste manier om de submit-data relevant te houden.
 function disableHiddenFields(form) {
   for (const element of form.elements) {
+    const wasRequired = element.matches("[required]") || element.dataset.wasRequired === "true";
+
+    if (wasRequired) {
+      element.dataset.wasRequired = "true";
+    }
+
     const isHidden = element.offsetParent === null;
     element.disabled = isHidden;
-
-    if (isHidden) {
-      element.required = false;
-    }
+    element.required = wasRequired && !isHidden;
   }
+}
+
+function hasValueForRequiredField(field) {
+  if (field.type === "radio") {
+    return Boolean(
+      form?.querySelector(`input[type="radio"][name="${field.name}"]:checked`),
+    );
+  }
+
+  if (field.type === "checkbox") {
+    return field.checked;
+  }
+
+  if (field.type === "file") {
+    return Boolean(field.files && field.files.length > 0);
+  }
+
+  return field.value.trim() !== "";
+}
+
+function updateSubmitButtonState() {
+  if (!form || !submitButton) {
+    return;
+  }
+
+  const requiredFields = Array.from(form.elements).filter(
+    (element) => element instanceof HTMLInputElement && element.required && !element.disabled,
+  );
+
+  const checkedRadioNames = new Set();
+  const allRequiredCompleted = requiredFields.every((field) => {
+    if (field.type === "radio") {
+      if (checkedRadioNames.has(field.name)) {
+        return true;
+      }
+
+      checkedRadioNames.add(field.name);
+      return hasValueForRequiredField(field);
+    }
+
+    return hasValueForRequiredField(field);
+  });
+
+  submitButton.disabled = !allRequiredCompleted;
+
 }
 
 // * Hier pakken we de onderdelen voor upload + bestandsweergave.
@@ -94,6 +145,10 @@ const maritalAgreementFileNameDisplay = document.getElementById(
 );
 
 function displayFileInfo() {
+  if (!maritalAgreementFileInput || !maritalAgreementFileNameDisplay) {
+    return;
+  }
+
   // * Is er een bestand gekozen? Dan laten we direct zien wat er klaarstaat.
   // * Inclusief delete-knop, zodat je snel opnieuw kan kiezen.
   if (
@@ -130,257 +185,360 @@ function displayFileInfo() {
 }
 
 function clearFile() {
+  if (!maritalAgreementFileInput) {
+    return;
+  }
+
   maritalAgreementFileInput.value = "";
   displayFileInfo();
+  updateSubmitButtonState();
 }
 
-maritalAgreementFileInput.addEventListener("change", displayFileInfo);
+if (maritalAgreementFileInput) {
+  maritalAgreementFileInput.addEventListener("change", () => {
+    displayFileInfo();
+    updateSubmitButtonState();
+  });
+}
+
+// * Helper om validatieresultaat te retourneren.
+const validationResult = (valid, message) => ({ valid, message });
 
 // * BSN checken we in een paar stappen zodat de gebruiker snelle feedback krijgt.
-// * We geven steeds hetzelfde type resultaat terug, dan blijft de UI simpel.
 function validateBSN(bsn) {
   const cleanBSN = bsn.replace(/\D/g, "");
 
-  // * Eerst de snelle basischeck, anders heeft verdere controle weinig zin.
   if (cleanBSN.length !== 9) {
-    return {
-      valid: false,
-      message: "❌ BSN moet uit 9 cijfers bestaan",
-    };
+    return validationResult(false, "❌ BSN moet uit 9 cijfers bestaan");
   }
 
-  // * Daarna de echte controle om random nummers eruit te filteren.
   let sum = 0;
   for (let i = 0; i < 9; i++) {
     sum += parseInt(cleanBSN[i]) * (9 - i);
   }
 
-  if (sum % 11 !== 0) {
-    return {
-      valid: false,
-      message: "❌ BSN is ongeldig (BSN bestaat niet)",
-    };
-  }
-
-  return {
-    valid: true,
-    message: "✅ BSN is geldig!",
-  };
-}
-
-// * Hier tonen we feedback direct onder het veld, da's duidelijker voor de user.
-// * Oude melding eerst weg, zodat je niet meerdere berichten onder elkaar krijgt.
-// * Extra class erbij voor snelle visuele check (groen/rood).
-function showValidationFeedback(inputElement, validation) {
-  let feedbackElement = inputElement.nextElementSibling;
-
-  // * Even oude feedback weggooien voor een nette UI.
-  if (
-    feedbackElement &&
-    feedbackElement.classList.contains("validation-feedback")
-  ) {
-    feedbackElement.remove();
-  }
-
-  // * Nieuwe feedback opbouwen met status.
-  const feedback = document.createElement("div");
-  feedback.className = `validation-feedback ${validation.valid ? "valid" : "invalid"}`;
-  feedback.textContent = validation.message;
-  feedback.setAttribute("role", "alert");
-
-  inputElement.parentElement.insertBefore(
-    feedback,
-    inputElement.nextElementSibling,
-  );
-
-  // * Input ook visueel markeren, dan zie je meteen waar het fout gaat.
-  inputElement.classList.toggle("input-valid", validation.valid);
-  inputElement.classList.toggle("input-invalid", !validation.valid);
+  return sum % 11 !== 0
+    ? validationResult(false, "❌ BSN is ongeldig (volgorde cijfers klopt niet)")
+    : validationResult(true, "");
 }
 
 // * Algemene datumcheck die we op meerdere plekken kunnen hergebruiken.
-// * Zo houden we de regels overal hetzelfde.
 function validateDate(dateValue, fieldName = "Datum") {
   if (!dateValue) {
-    return {
-      valid: false,
-      message: `❌ ${fieldName} is verplicht`,
-    };
+    return validationResult(false, `❌ ${fieldName} is verplicht`);
   }
 
   const selectedDate = new Date(dateValue);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // * Even checken: datum in de toekomst is hier niet logisch.
   if (selectedDate > today) {
-    return {
-      valid: false,
-      message: `❌ ${fieldName} kan niet in de toekomst liggen`,
-    };
+    return validationResult(false, `❌ ${fieldName} kan niet in de toekomst liggen`);
   }
 
-  // * Ondergrens om typefouten of onrealistische invoer te vangen.
   const minYear = new Date("1900-01-01");
   if (selectedDate < minYear) {
-    return {
-      valid: false,
-      message: `❌ ${fieldName} moet na 1900 liggen`,
-    };
+    return validationResult(false, `❌ ${fieldName} moet na 1900 liggen`);
   }
 
-  return {
-    valid: true,
-    message: `✅ ${fieldName} is geldig!`,
-  };
+  return validationResult(true, "");
 }
 
 // * Extra regel tussen 2 datums: de volgorde moet logisch zijn.
-// * Deze check voorkomt tegenstrijdige data in het formulier.function validateMaritalAgreementDate(maritalDate, deceasedDate) {
-if (!maritalDate || !deceasedDate) {
-  return {
-    valid: false,
-    message: "❌ Beide datums zijn verplicht",
-  };
+function validateMaritalAgreementDate(maritalDate, deceasedDate) {
+  if (!maritalDate || !deceasedDate) {
+    return validationResult(false, "❌ Beide datums zijn verplicht");
+  }
+
+  const maritalDateObj = new Date(maritalDate);
+  const deceasedDateObj = new Date(deceasedDate);
+
+  return maritalDateObj >= deceasedDateObj
+    ? validationResult(false, "❌ Huwelijksdatum moet vóór overlijdensdatum liggen")
+    : validationResult(true, "");
 }
 
-const maritalDateObj = new Date(maritalDate);
-const deceasedDateObj = new Date(deceasedDate);
+// * Algemene validatie voor numerieke velden.
+function validateNumberField(value, fieldName = "Nummer") {
+  const cleanedValue = value.trim();
 
-// ! Deze check is belangrijk, anders klopt de tijdlijn niet.
-if (maritalDateObj >= deceasedDateObj) {
-  return {
-    valid: false,
-    message: "❌ Huwelijksdatum moet vóór overlijdensdatum liggen",
-  };
+  if (!cleanedValue) {
+    return validationResult(false, `❌ ${fieldName} is verplicht`);
+  }
+
+  return !/^\d+$/.test(cleanedValue)
+    ? validationResult(false, `❌ ${fieldName} mag alleen cijfers bevatten`)
+    : validationResult(true, "");
 }
 
-return {
-  valid: true,
-  message: "✅ Datums kloppen!",
+// * Voorletters moeten hoofdletters zijn, gescheiden door punten.
+function validateInitials(value) {
+  const cleanedValue = value.trim();
+
+  if (!cleanedValue) {
+    return validationResult(false, "❌ Voorletter(s) zijn verplicht");
+  }
+
+  return !/^[A-Z](\.[A-Z])*\.?$/.test(cleanedValue)
+    ? validationResult(false, "❌ Gebruik alleen hoofdletters en punten (bijv. J.P. of A.B.C.)")
+    : validationResult(true, "");
+}
+
+// * Tussenvoegsel is optioneel, maar als het ingevuld is moet het aan bepaalde regels voldoen.
+function validatePrefix(value) {
+  const cleanedValue = value.trim();
+
+  if (!cleanedValue) {
+    return validationResult(true, "");
+  }
+
+  return !/^[a-z\s']+$/.test(cleanedValue)
+    ? validationResult(false, "❌ Tussenvoegsel mag alleen kleine letters bevatten (bijv. van der, de)")
+    : validationResult(true, "");
+}
+
+// * Algemene tekstvalidatie helper.
+const validateTextField = (value, fieldName, minLength = 2) => {
+  const cleanedValue = value.trim();
+
+  if (!cleanedValue) {
+    return validationResult(false, `❌ ${fieldName} is verplicht`);
+  }
+
+  if (!/^[A-Za-zÀ-ÿ\s\-']+$/.test(cleanedValue)) {
+    return validationResult(false, `❌ ${fieldName} mag alleen letters bevatten (bijv. Jansen, van der Berg)`);
+  }
+
+  return cleanedValue.length < minLength
+    ? validationResult(false, `❌ ${fieldName} moet minimaal ${minLength} letters bevatten`)
+    : validationResult(true, "");
 };
+
+// * Achternaam en vestigingsplaats gebruiken dezelfde logica.
+const validateLastName = (value) => validateTextField(value, "Achternaam");
+const validateCity = (value) => validateTextField(value, "Vestigingsplaats");
+
+// * Hier tonen we feedback direct onder het veld, da's duidelijker voor de user.
+// * Bij een geldig veld tonen we niks, alleen bij fouten.
+function showValidationFeedback(inputElement, validation) {
+  let feedbackElement = inputElement.nextElementSibling;
+
+  // * Oude feedback en markeringen opruimen.
+  if (feedbackElement?.classList.contains("validation-feedback")) {
+    feedbackElement.remove();
+  }
+  inputElement.classList.remove("input-valid", "input-invalid");
+
+  // * Alleen feedback tonen bij fouten.
+  if (!validation.valid) {
+    const feedback = document.createElement("div");
+    feedback.className = "validation-feedback invalid";
+    feedback.textContent = validation.message;
+    feedback.setAttribute("role", "alert");
+
+    inputElement.parentElement.insertBefore(
+      feedback,
+      inputElement.nextElementSibling,
+    );
+    inputElement.classList.add("input-invalid");
+  }
+}
 
 // * Alles pas koppelen als de pagina klaar is.
 // * Scheelt null-errors omdat de velden dan sowieso bestaan.
 document.addEventListener("DOMContentLoaded", () => {
-  const bsnField = document.getElementById("bsn-field");
-  const deceasedDateField = document.querySelector('input[type="date"]');
-  const maritalAgreementDateField = document.getElementById(
-    "maritalAgreementDate",
-  );
-  const notaryDateField = document.getElementById("notaryDate");
-  const notaryProtocolField = document.getElementById("notaryProtocol");
+  if (form) {
+    disableHiddenFields(form);
+    updateSubmitButtonState();
+    form.addEventListener("input", updateSubmitButtonState);
+    form.addEventListener("change", updateSubmitButtonState);
+  }
 
-  // * BSN direct begeleiden tijdens invullen + checken bij verlaten van het veld.
-  // * Zo corrigeren we input vroeg en voorkomen we gedoe bij submit.
+  // * Configuratie van alle velden met hun validators en required status.
+  const fieldValidations = [
+    {
+      field: document.getElementById("bsn-field"),
+      validator: validateBSN,
+      required: true,
+      emptyMessage: "❌ BSN is verplicht",
+      realTimeOnInput: true,
+    },
+    {
+      field: document.getElementById("deceasedDate"),
+      validator: (val) => validateDate(val, "Overlijdensdatum"),
+      required: true,
+      emptyMessage: "❌ Overlijdensdatum is verplicht",
+      onChange: true,
+    },
+    {
+      field: document.querySelector(".deceased-info .initial"),
+      validator: validateInitials,
+      required: true,
+      emptyMessage: "❌ Voorletter(s) zijn verplicht",
+    },
+    {
+      field: document.querySelector(".deceased-info .prefix"),
+      validator: validatePrefix,
+      required: false,
+    },
+    {
+      field: document.querySelector(".deceased-info .lastname"),
+      validator: validateLastName,
+      required: true,
+      emptyMessage: "❌ Achternaam is verplicht",
+    },
+    {
+      field: document.querySelector(".notary-info .initial"),
+      validator: validateInitials,
+      required: false,
+    },
+    {
+      field: document.getElementById("notaryPrefix"),
+      validator: validatePrefix,
+      required: false,
+    },
+    {
+      field: document.getElementById("notaryLastname"),
+      validator: validateLastName,
+      required: false,
+    },
+    {
+      field: document.getElementById("notaryCity"),
+      validator: validateCity,
+      required: false,
+    },
+    {
+      field: document.getElementById("notaryProtocol"),
+      validator: (val) => validateNumberField(val, "Protocolnummer"),
+      required: false,
+    },
+    {
+      field: document.getElementById("notaryDate"),
+      validator: (val) => validateDate(val, "Datum testament"),
+      required: false,
+      onChange: true,
+    },
+  ];
+
+  const bsnField = document.getElementById("bsn-field");
+  const deceasedDateField = document.getElementById("deceasedDate");
+  const maritalAgreementDateField = document.getElementById("maritalAgreementDate");
+
+  // * Helper functie voor real-time validatie.
+  const setupRealTimeValidation = (field, validator, onChange = false) => {
+    if (!field) return;
+
+    const validate = () => {
+      if (!field.value.trim() && !onChange) return;
+      const result = validator(field.value);
+      showValidationFeedback(field, result);
+    };
+
+    field.addEventListener("input", () => {
+      const hasFeedback = field.nextElementSibling?.classList.contains("validation-feedback");
+      if (hasFeedback && field.value.trim()) {
+        validate();
+      }
+    });
+
+    if (onChange) {
+      field.addEventListener("change", () => {
+        const hasFeedback = field.nextElementSibling?.classList.contains("validation-feedback");
+        if (hasFeedback) validate();
+      });
+    }
+  };
+
+  // * BSN heeft speciale input filtering.
   if (bsnField) {
     bsnField.addEventListener("input", () => {
-      // * Hier houden we de invoer alvast schoon.
       bsnField.value = bsnField.value.replace(/\D/g, "");
+      const hasFeedback = bsnField.nextElementSibling?.classList.contains("validation-feedback");
+      if (hasFeedback && bsnField.value.length === 9) {
+        showValidationFeedback(bsnField, validateBSN(bsnField.value));
+      }
     });
     bsnField.addEventListener("blur", () => {
-      if (bsnField.value.trim()) {
-        const result = validateBSN(bsnField.value);
-        showValidationFeedback(bsnField, result);
-      }
+      const result = !bsnField.value.trim() 
+        ? { valid: false, message: "❌ BSN is verplicht" }
+        : validateBSN(bsnField.value);
+      showValidationFeedback(bsnField, result);
     });
   }
 
-  // * Overlijdensdatum pas checken als de gebruiker klaar is met typen.
+  // * Datumvelden valideren bij blur.
   if (deceasedDateField) {
-    deceasedDateField.addEventListener("blur", () => {
-      if (deceasedDateField.value) {
-        const result = validateDate(
-          deceasedDateField.value,
-          "Overlijdensdatum",
-        );
-        showValidationFeedback(deceasedDateField, result);
-      }
+    const validate = () => {
+      const result = !deceasedDateField.value
+        ? { valid: false, message: "❌ Overlijdensdatum is verplicht" }
+        : validateDate(deceasedDateField.value, "Overlijdensdatum");
+      showValidationFeedback(deceasedDateField, result);
+    };
+    deceasedDateField.addEventListener("blur", validate);
+    deceasedDateField.addEventListener("change", () => {
+      const hasFeedback = deceasedDateField.nextElementSibling?.classList.contains("validation-feedback");
+      if (hasFeedback) validate();
     });
   }
 
-  // * Deze vergelijking heeft alleen zin als beide datums er zijn.
+  // * Huwelijksdatum heeft speciale validatie met overlijdensdatum.
   if (maritalAgreementDateField) {
-    maritalAgreementDateField.addEventListener("blur", () => {
+    const validate = () => {
       if (maritalAgreementDateField.value && deceasedDateField?.value) {
-        const result = validateMaritalAgreementDate(
-          maritalAgreementDateField.value,
-          deceasedDateField.value,
+        showValidationFeedback(
+          maritalAgreementDateField,
+          validateMaritalAgreementDate(maritalAgreementDateField.value, deceasedDateField.value)
         );
-        showValidationFeedback(maritalAgreementDateField, result);
       }
+    };
+    maritalAgreementDateField.addEventListener("blur", validate);
+    maritalAgreementDateField.addEventListener("change", () => {
+      const hasFeedback = maritalAgreementDateField.nextElementSibling?.classList.contains("validation-feedback");
+      if (hasFeedback) validate();
     });
   }
 
-  // * Zelfde datumregels hergebruiken voor consistente feedback.
-  if (notaryDateField) {
-    notaryDateField.addEventListener("blur", () => {
-      if (notaryDateField.value) {
-        const result = validateDate(notaryDateField.value, "Datum testament");
-        showValidationFeedback(notaryDateField, result);
-      }
-    });
-  }
+  // * Real-time validatie voor alle andere velden.
+  fieldValidations.forEach(({ field, validator }) => {
+    if (field && field !== bsnField && field !== deceasedDateField) {
+      setupRealTimeValidation(field, validator);
+    }
+  });
 
-  // * Protocolnummer pas valideren als het veld klaar is.
-  if (notaryProtocolField) {
-    notaryProtocolField.addEventListener("blur", () => {
-      if (notaryProtocolField.value.trim()) {
-        const result = validateNumberField(
-          notaryProtocolField.value,
-          "Protocolnummer",
-        );
-        showValidationFeedback(notaryProtocolField, result);
-      }
-    });
-  }
-
-  // ! Laatste safety-check bij submit.
-  // * Alles nog 1x nalopen voor het formulier echt weggaat.
-  // ! Bij fouten blokkeren we submit, anders gaat er rommel door.
+  // ! Submit validatie.
   if (form) {
     form.addEventListener("submit", (e) => {
       let hasError = false;
 
-      if (bsnField?.value) {
-        const check = validateBSN(bsnField.value);
-        if (!check.valid) {
-          showValidationFeedback(bsnField, check);
-          hasError = true;
-        }
-      }
+      // * Valideer alle geconfigureerde velden.
+      fieldValidations.forEach(({ field, validator, required, emptyMessage }) => {
+        if (!field) return;
 
-      if (deceasedDateField?.value) {
-        const check = validateDate(deceasedDateField.value, "Overlijdensdatum");
-        if (!check.valid) {
-          showValidationFeedback(deceasedDateField, check);
+        if (required && !field.value.trim()) {
+          showValidationFeedback(field, { valid: false, message: emptyMessage });
           hasError = true;
+        } else if (field.value.trim()) {
+          const result = validator(field.value);
+          if (!result.valid) {
+            showValidationFeedback(field, result);
+            hasError = true;
+          }
         }
-      }
+      });
 
+      // * Speciale validatie voor huwelijksdatum.
       if (maritalAgreementDateField?.value && deceasedDateField?.value) {
-        const check = validateMaritalAgreementDate(
+        const result = validateMaritalAgreementDate(
           maritalAgreementDateField.value,
-          deceasedDateField.value,
+          deceasedDateField.value
         );
-        if (!check.valid) {
-          showValidationFeedback(maritalAgreementDateField, check);
+        if (!result.valid) {
+          showValidationFeedback(maritalAgreementDateField, result);
           hasError = true;
         }
       }
 
-      if (notaryDateField?.value) {
-        const check = validateDate(notaryDateField.value, "Datum testament");
-        if (!check.valid) {
-          showValidationFeedback(notaryDateField, check);
-          hasError = true;
-        }
-      }
-
-      if (hasError) {
-        e.preventDefault();
-      } else {
-      }
+      if (hasError) e.preventDefault();
     });
   }
 });
