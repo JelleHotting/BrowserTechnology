@@ -292,11 +292,6 @@ label input[type="radio"] {
   flex: 10;
 }
 
-.hint svg {
-  vertical-align: middle;
-  width: 14px;
-  height: 14px;
-}
 
 /* * ========================================================================== */
 /* * ALGEMENE KNOPPEN */
@@ -324,27 +319,6 @@ button.next-question-btn {
   margin-left: auto;
 }
 
-button[type="submit"]:disabled,
-button.next-question-btn:disabled {
-  background-color: #e0e0e0;
-  color: #8a8a8a;
-  cursor: not-allowed;
-}
-
-button[type="submit"]:disabled:hover,
-button.next-question-btn:disabled:hover {
-  background-color: #e0e0e0;
-}
-
-button.next-question:disabled {
-  background-color: #e0e0e0;
-  color: #8a8a8a;
-  cursor: not-allowed;
-}
-
-button.next-question:disabled:hover {
-  background-color: #e0e0e0;
-}
 
 /* * ========================================================================== */
 /* * FILE PICKER COMPONENT */
@@ -405,53 +379,10 @@ button.next-question:disabled:hover {
   align-items: center;
 }
 
-.file-name.has-file {
-  color: var(--ns-blue);
-  font-weight: 500;
-}
-
-.file-info {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  background-color: rgba(0, 48, 130, 0.05);
-  border-radius: 4px;
-  border-left: 3px solid var(--ns-yellow);
-}
-
-.file-info svg {
-  color: var(--ns-yellow);
-  flex-shrink: 0;
-}
-
-.file-delete-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  padding: 0.25rem;
-  cursor: pointer;
-  color: var(--ns-gray-dark);
-  transition: all 0.2s ease;
-  border-radius: 4px;
-  margin-left: auto;
-}
-
-.file-delete-btn:hover {
-  background-color: rgba(0, 0, 0, 0.08);
-  color: var(--ns-blue);
-}
-
-.file-delete-btn:active {
-  transform: scale(0.95);
-}
 
 /* * ========================================================================== */
 /* * TOOLTIP COMPONENT */
-/* * CSS-only tooltip met anchor positioning voor toelichting. */
+/* * Eenvoudige tooltip met hover- en focus-interacties. */
 /* * ========================================================================== */
 .tooltip-trigger {
   display: inline-flex;
@@ -555,6 +486,7 @@ button.next-question:disabled:hover {
 /* * Visuele feedback voor geldige/ongeldige invoer. */
 /* * ========================================================================== */
 .validation-feedback {
+  display: none;
   margin-top: 0.5rem;
   padding: 0.75rem;
   border-radius: 4px;
@@ -564,15 +496,27 @@ button.next-question:disabled:hover {
 }
 
 .validation-feedback.valid {
+  display: block;
   background-color: var(--validation-success-bg);
   color: var(--validation-success-text);
   border: 1px solid var(--validation-success-border);
 }
 
+
+
 .validation-feedback.invalid {
+  display: block;
   background-color: var(--validation-error-bg);
   color: var(--validation-error-text);
   border: 1px solid var(--validation-error-border);
+}
+
+.deceased-info #deceased-info-error {
+  display: none;
+}
+
+.deceased-info:has(input[required]:user-invalid) #deceased-info-error {
+  display: block;
 }
 
 /* ? Fallback zonder JS: gebruik browser-validatie op niet-radio velden. */
@@ -754,12 +698,6 @@ input.input-invalid:not([type="radio"]) {
     left: 50%;
     top: calc(100% + 8px);
     transform: translateX(-50%);
-  }
-
-  .tooltip::after {
-    bottom: auto;
-    top: -6px;
-    border-color: transparent transparent #333 transparent;
   }
 
   .tooltip-trigger:hover ~ .tooltip,

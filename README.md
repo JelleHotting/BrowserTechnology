@@ -184,8 +184,71 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 ### Wat ga ik morgen doen?
 
 - [ ] Testen met keyboard navigation en screenreaders
-- [ ] User testing en feedback verzamelen
 - [ ] Eventuele refinements op basis van testing
+
+### Weekly Geek
+
+[Link naar video: What Happened to Text Inputs?](https://briefs.video/videos/what-happened-to-text-inputs/)
+
+#### De gevaren van "te mooie" design
+
+Developers denken vaak dat standaard HTML-elementen te complex en lelijk zijn, dus ze verwijderen visuele hints die voor gebruikers belangrijk zijn:
+
+**Links zonder underline**
+- We halen de `text-decoration` weg omdat het "lelijk" is
+- Maar voor gebruikers is die underline een **visueel signaal** dat het een link is
+
+**Text inputs zonder borders**
+- We vervangen duidelijke borders door een enkel lijntje
+- Voor gebruikers ziet dit er eerder uit als een **line break** dan een input field
+
+**Labels als placeholders**
+- We gebruiken labels als placeholders om ruimte te sparen
+- Zonder duidelijke `:focus` state is het **niet duidelijk** dat je het kan invullen
+
+
+**Lering:** Standaard HTML-elementen zien er "saai" uit, maar dat komt omdat ze **goed ontworpen zijn voor gebruikers**. Denk altijd twee keer voordat je dit weghalt.
+
+
+## Dag 8
+
+### Wat heb ik gedaan vandaag?
+
+| Activiteit | Duur |
+|------------|------|
+| `index.html` verbeterd met `aria-describedby`, role-feedback en extra validation-feedback elementen | 2 uur |
+| Markup opgeschoond (file picker, labels) en knop naar submit aangepast voor correcte formulierflow | 1,5 uur |
+| `main.js` gerefactord naar modulairere structuur met `routingRules` en centrale event-binding | 3 uur |
+| Zichtbaarheid/required-sync functies en BSN elfproef-validatie verbeterd | 1,5 uur |
+| `styles.css` opgeschoond en tooltip/validation-feedback weergave aangepast | 1 uur |
+
+### Wat heb ik geleerd?
+
+* Dat formulierlogica veel beter onderhoudbaar wordt als je werkt met duidelijke modules en centrale event-binding.
+* Dat toegankelijkheid verbetert wanneer feedback expliciet gekoppeld is via `aria-describedby` en semantische feedback-rollen.
+* Dat UX, validatie en semantische HTML samen zorgen voor duidelijkere foutmeldingen en minder verwarring voor de gebruiker.
+
+### Wat ga ik morgen doen?
+
+- [ ] Keyboard-only flow volledig testen
+- [ ] Screenreader test doen op alle foutmeldingen
+- [ ] Laatste refinements op feedbackteksten en spacing
+
+
+
+## Bronvermelding AI (APA 7)
+
+Voor de implementatie van validatie waarbij alleen zichtbare velden `required` blijven, is AI-assistentie gebruikt in dit project.
+
+GitHub Copilot. (2026, 10 maart). Antwoorden op prompts over formuliervalidatie [Large language model output]. OpenAI.
+
+Voor de herstructurering en verbetering van formulier-UX, validatie en toegankelijkheid (inclusief aanpassingen in `index.html`, refactor van `main.js` en opschoning van `styles.css`) is ook AI-assistentie gebruikt.
+
+GitHub Copilot. (2026, 10 maart). Antwoorden op prompts over formulier-UX, validatie, toegankelijkheid en refactoring [Large language model output]. OpenAI.
+
+Commit gemaakt met behulp van Copilot.
+
+
 
 
 

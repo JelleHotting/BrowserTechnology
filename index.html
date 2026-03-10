@@ -122,6 +122,7 @@
                 maxlength="9"
                 minlength="1"
                 title="Vul voorletters in met hoofdletters, gescheiden door punten (bijv. J.P. of J.P.H.)"
+                aria-describedby="deceased-info-error"
               />
             </label>
 
@@ -145,17 +146,18 @@
                 maxlength="50"
                 minlength="1"
                 title="Vul achternaam in met hoofdletters (bijv. Jansen, de Vries, etc.)"
+                aria-describedby="deceased-info-error"
               />
             </label>
           </div>
-          <label class="required">
+          <label class="required" for="bsn-field">
             <span>BSN</span>
             <button
               type="button"
               class="tooltip-trigger"
               aria-label="Wat is BSN?"
               aria-describedby="bsn-tooltip"
-            >
+                      >
               <svg
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"
@@ -179,8 +181,9 @@
               required
               inputmode="numeric"
               pattern="[0-9]{9}"
-              aria-describedby="bsn-tooltip"
+              aria-describedby="bsn-tooltip deceased-info-error"
             />
+            <div class="validation-feedback" role="alert"></div>
             <div id="bsn-tooltip" class="tooltip" role="tooltip">
               <p><strong>Burgerservicenummer</strong></p>
               <p>
@@ -197,8 +200,21 @@
 
           <label class="required">
             <span>Overlijdensdatum</span>
-            <input id="deceasedDate" type="date" required max="2026-03-09" />
+            <input
+              id="deceasedDate"
+              type="date"
+              required
+              max="2026-03-09"
+              aria-describedby="deceased-info-error"
+            />
           </label>
+
+          <div
+            class="validation-feedback invalid"
+            id="deceased-info-error"
+            role="alert"
+            aria-live="polite"
+          >Niet alle verplichte velden zijn correct ingevuld.</div>
         </fieldset>
 
         <fieldset class="marital-status">
@@ -206,14 +222,33 @@
             <span>Had de overledene een echtgenoot of partner?</span>
           </legend>
           <label>
-            <input type="radio" name="maritalStatus" value="nee" required />
+            <input
+              type="radio"
+              name="maritalStatus"
+              value="nee"
+              required
+              aria-describedby="marital-status-error"
+            />
             Nee
           </label>
 
           <label>
-            <input type="radio" name="maritalStatus" value="ja" required />
+            <input
+              type="radio"
+              name="maritalStatus"
+              value="ja"
+              required
+              aria-describedby="marital-status-error"
+            />
             Ja
           </label>
+
+          <div
+            class="validation-feedback"
+            id="marital-status-error"
+            role="alert"
+            aria-live="polite"
+          >Maak een keuze.</div>
         </fieldset>
 
         <fieldset class="marital-agreement hidden-fieldset">
@@ -225,13 +260,32 @@
             >
           </legend>
           <label>
-            <input type="radio" name="maritalAgreement" value="nee" required />
+            <input
+              type="radio"
+              name="maritalAgreement"
+              value="nee"
+              required
+              aria-describedby="marital-agreement-error"
+            />
             Nee
           </label>
           <label>
-            <input type="radio" name="maritalAgreement" value="ja" required />
+            <input
+              type="radio"
+              name="maritalAgreement"
+              value="ja"
+              required
+              aria-describedby="marital-agreement-error"
+            />
             Ja
           </label>
+
+          <div
+            class="validation-feedback"
+            id="marital-agreement-error"
+            role="alert"
+            aria-live="polite"
+          >Maak een keuze.</div>
 
           <div class="file-picker">
             <input
@@ -256,7 +310,9 @@
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
               </svg>
               <span>Upload notariële akte</span>
-              <button
+              
+            </label>
+            <button
                 type="button"
                 class="tooltip-trigger"
                 aria-label="Welk bestandsformaat?"
@@ -277,7 +333,6 @@
                   ></path>
                 </svg>
               </button>
-            </label>
             <div id="file-format-tooltip" class="tooltip" role="tooltip">
               <p><strong>Bestandsformaat</strong></p>
               <p>Upload je notariële akte als:</p>
@@ -294,6 +349,7 @@
             ><span>Datum akte</span></label
           >
           <input type="date" id="maritalAgreementDate" required />
+          <div class="validation-feedback" role="alert"></div>
         </fieldset>
 
         <fieldset class="final-settlement hidden-fieldset">
@@ -304,14 +360,33 @@
             >
           </legend>
           <label>
-            <input type="radio" name="finalSettlement" value="nee" required />
+            <input
+              type="radio"
+              name="finalSettlement"
+              value="nee"
+              required
+              aria-describedby="final-settlement-error"
+            />
             Nee
           </label>
 
           <label>
-            <input type="radio" name="finalSettlement" value="ja" required />
+            <input
+              type="radio"
+              name="finalSettlement"
+              value="ja"
+              required
+              aria-describedby="final-settlement-error"
+            />
             Ja
           </label>
+
+          <div
+            class="validation-feedback"
+            id="final-settlement-error"
+            role="alert"
+            aria-live="polite"
+          >Maak een keuze.</div>
         </fieldset>
 
         <fieldset class="children-info hidden-fieldset">
@@ -319,14 +394,33 @@
             <span>Had de overledene kinderen?</span>
           </legend>
           <label>
-            <input type="radio" name="children" value="nee" required />
+            <input
+              type="radio"
+              name="children"
+              value="nee"
+              required
+              aria-describedby="children-info-error"
+            />
             Nee
           </label>
 
           <label>
-            <input type="radio" name="children" value="ja" required />
+            <input
+              type="radio"
+              name="children"
+              value="ja"
+              required
+              aria-describedby="children-info-error"
+            />
             Ja
           </label>
+
+          <div
+            class="validation-feedback"
+            id="children-info-error"
+            role="alert"
+            aria-live="polite"
+          >Maak een keuze.</div>
         </fieldset>
 
         <fieldset class="deceased-child-info hidden-fieldset">
@@ -337,14 +431,33 @@
             >
           </legend>
           <label>
-            <input type="radio" name="deceasedChild" value="nee" required />
+            <input
+              type="radio"
+              name="deceasedChild"
+              value="nee"
+              required
+              aria-describedby="deceased-child-info-error"
+            />
             Nee
           </label>
 
           <label>
-            <input type="radio" name="deceasedChild" value="ja" required />
+            <input
+              type="radio"
+              name="deceasedChild"
+              value="ja"
+              required
+              aria-describedby="deceased-child-info-error"
+            />
             Ja
           </label>
+
+          <div
+            class="validation-feedback"
+            id="deceased-child-info-error"
+            role="alert"
+            aria-live="polite"
+          >Maak een keuze.</div>
         </fieldset>
 
         <fieldset class="grandchildren-info hidden-fieldset">
@@ -357,6 +470,7 @@
               name="deceasedChildGrandchildren"
               value="nee"
               required
+              aria-describedby="grandchildren-info-error"
             />
             Nee
           </label>
@@ -367,9 +481,17 @@
               name="deceasedChildGrandchildren"
               value="ja"
               required
+              aria-describedby="grandchildren-info-error"
             />
             Ja
           </label>
+
+          <div
+            class="validation-feedback"
+            id="grandchildren-info-error"
+            role="alert"
+            aria-live="polite"
+          >Maak een keuze.</div>
         </fieldset>
 
         <fieldset class="testament-info hidden-fieldset">
@@ -377,14 +499,33 @@
             <span>Had de overledene een testament?</span>
           </legend>
           <label>
-            <input type="radio" name="testament" value="nee" required />
+            <input
+              type="radio"
+              name="testament"
+              value="nee"
+              required
+              aria-describedby="testament-info-error"
+            />
             Nee
           </label>
 
           <label>
-            <input type="radio" name="testament" value="ja" required />
+            <input
+              type="radio"
+              name="testament"
+              value="ja"
+              required
+              aria-describedby="testament-info-error"
+            />
             Ja
           </label>
+
+          <div
+            class="validation-feedback"
+            id="testament-info-error"
+            role="alert"
+            aria-live="polite"
+          >Maak een keuze.</div>
         </fieldset>
 
         <fieldset class="notary-info hidden-fieldset">
@@ -509,9 +650,10 @@
           <label for="notaryDate" class="required">
             <span>Datum van het testament of van de laatste wijziging</span>
             <input type="date" name="notaryDate" id="notaryDate" required />
+            <div class="validation-feedback" role="alert"></div>
           </label>
         </fieldset>
-        <button type="button" class="next-question-btn">Volgende vraag</button>
+        <button type="submit" class="next-question-btn">Volgende vraag</button>
       </form>
     </main>
   </body>
