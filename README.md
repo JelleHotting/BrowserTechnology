@@ -216,25 +216,17 @@ Developers denken vaak dat standaard HTML-elementen te complex en lelijk zijn, d
 
 | Activiteit | Duur |
 |------------|------|
-| `index.html` verbeterd met `aria-describedby`, role-feedback en extra validation-feedback elementen | 2 uur |
-| Markup opgeschoond (file picker, labels) en knop naar submit aangepast voor correcte formulierflow | 1,5 uur |
-| `main.js` gerefactord naar modulairere structuur met `routingRules` en centrale event-binding | 3 uur |
-| Zichtbaarheid/required-sync functies en BSN elfproef-validatie verbeterd | 1,5 uur |
-| `styles.css` opgeschoond en tooltip/validation-feedback weergave aangepast | 1 uur |
+| Javascript beter leesbaar gemaakt | 3 uur |
+| Errors in de html gezet en met css basis errors gegeven | 5  uur |
+| Ping-pong | 2 uur |
 
 ### Wat heb ik geleerd?
 
-* Dat formulierlogica veel beter onderhoudbaar wordt als je werkt met duidelijke modules en centrale event-binding.
-* Dat toegankelijkheid verbetert wanneer feedback expliciet gekoppeld is via `aria-describedby` en semantische feedback-rollen.
-* Dat UX, validatie en semantische HTML samen zorgen voor duidelijkere foutmeldingen en minder verwarring voor de gebruiker.
+* Dat je veel kan doen aan erros in css alleen al met de `:invalid` pseudo-class
 
 ### Wat ga ik morgen doen?
 
-- [ ] Keyboard-only flow volledig testen
-- [ ] Screenreader test doen op alle foutmeldingen
-- [ ] Laatste refinements op feedbackteksten en spacing
-
-
+- [x] CSS to the rescue
 
 ## Bronvermelding AI (APA 7)
 
@@ -242,11 +234,6 @@ Voor de implementatie van validatie waarbij alleen zichtbare velden `required` b
 
 GitHub Copilot. (2026, 10 maart). Antwoorden op prompts over formuliervalidatie [Large language model output]. OpenAI.
 
-Voor de herstructurering en verbetering van formulier-UX, validatie en toegankelijkheid (inclusief aanpassingen in `index.html`, refactor van `main.js` en opschoning van `styles.css`) is ook AI-assistentie gebruikt.
-
-GitHub Copilot. (2026, 10 maart). Antwoorden op prompts over formulier-UX, validatie, toegankelijkheid en refactoring [Large language model output]. OpenAI.
-
-Commit gemaakt met behulp van Copilot.
 
 
 
