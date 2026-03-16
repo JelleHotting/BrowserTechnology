@@ -3,6 +3,7 @@
 // ==============================
 const form = document.querySelector("form");
 const bsnField = document.querySelector("#bsn-field");
+const bsnFeedback = document.querySelector("#bsn-error");
 const maritalAgreementSection = document.querySelector(".marital-agreement");
 const finalSettlementSection = document.querySelector(".final-settlement");
 const childrenInfoSection = document.querySelector(".children-info");
@@ -15,6 +16,8 @@ const notaryInfoSection = document.querySelector(".notary-info");
 // Constanten
 // ==============================
 const visibilityUpdateDelay = 50;
+const bsnLengthErrorMessage = "Voer een BSN van 9 cijfers in (zonder spaties of punten).";
+const bsnElfproefErrorMessage = "Dit BSN lijkt niet te kloppen. Controleer de 9 cijfers.";
 
 const routingRules = [
   {
@@ -103,6 +106,10 @@ function isValidBsnElfproef(bsn) {
     return false;
   }
 
+  if (bsn.length !== 9) {
+    return false;
+  }
+
   let checksum = 0;
 
   for (let i = 0; i < 8; i++) {
@@ -120,14 +127,46 @@ function updateBsnElfproefValidity() {
   }
 
   const bsn = bsnField.value.trim();
+  const hasNineDigits = /^\d{9}$/.test(bsn);
+
+  // Zodra er 9 cijfers zijn ingevoerd, neemt JS de foutweergave over.
+  bsnField.dataset.cssValidationOff = hasNineDigits ? "true" : "false";
+
+  if (!hasNineDigits) {
+    bsnField.setCustomValidity("");
+    bsnField.classList.remove("input-valid", "input-invalid");
+
+    if (bsnFeedback) {
+      bsnFeedback.textContent = bsnLengthErrorMessage;
+      bsnFeedback.classList.remove("invalid");
+    }
+
+    return;
+  }
 
   // Alleen elfproef tonen zodra er exact 9 cijfers zijn ingevuld.
-  if (/^\d{9}$/.test(bsn) && !isValidBsnElfproef(bsn)) {
-    bsnField.setCustomValidity("BSN is ongeldig volgens de elfproef.");
+  if (!isValidBsnElfproef(bsn)) {
+    bsnField.setCustomValidity(bsnElfproefErrorMessage);
+    bsnField.classList.add("input-invalid");
+    bsnField.classList.remove("input-valid");
+
+    if (bsnFeedback) {
+      bsnFeedback.textContent = bsnElfproefErrorMessage;
+      bsnFeedback.classList.add("invalid");
+      bsnFeedback.classList.remove("valid");
+    }
+
     return;
   }
 
   bsnField.setCustomValidity("");
+  bsnField.classList.add("input-valid");
+  bsnField.classList.remove("input-invalid");
+
+  if (bsnFeedback) {
+    bsnFeedback.textContent = bsnLengthErrorMessage;
+    bsnFeedback.classList.remove("invalid");
+  }
 }
 
 // Zoek op basis van gekozen waarde de volgende sectie.
@@ -306,9 +345,13 @@ function bindStepValidation() {
   form.addEventListener("submit", function (event) {
     const isValidStep = validateVisibleRequiredFields();
 
+    event.preventDefault();
+
     if (!isValidStep) {
-      event.preventDefault();
+      return;
     }
+
+    window.location.href = "formulier2.html";
   });
 }
 
@@ -341,6 +384,49 @@ function bindRoutingRules() {
     }
   }
 }
+
+// File Picker - toont geselecteerde bestandsnaam
+const maritalAgreementFileInput = document.getElementById("maritalAgreementFile");
+const maritalAgreementFileNameDisplay = document.getElementById("maritalAgreementFileName");
+
+function displayFileInfo() {
+    if (maritalAgreementFileInput.files && maritalAgreementFileInput.files.length > 0) {
+        const fileName = maritalAgreementFileInput.files[0].name;
+        const fileSize = maritalAgreementFileInput.files[0].size;
+        
+        // Formateer bestandsgrootte
+        const fileSizeInKB = (fileSize / 1024).toFixed(2);
+        
+        maritalAgreementFileNameDisplay.innerHTML = `
+            <div class="file-info" style="display: flex; align-items: center; gap: 8px;">
+          <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="margin-right: 4px;">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+          </svg>
+          <span style="font-size: 1rem;"><strong>${fileName}</strong> (${fileSizeInKB} KB)</span>
+          <button type="button" class="file-delete-btn" aria-label="Bestand verwijderen" style="background: none; border: none; cursor: pointer; padding: 4px;">
+              <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+              </svg>
+          </button>
+            </div>
+        `;
+        maritalAgreementFileNameDisplay.classList.add("has-file");
+        
+        // Add event listener to delete button
+        const deleteBtn = maritalAgreementFileNameDisplay.querySelector(".file-delete-btn");
+        deleteBtn.addEventListener("click", clearFile);
+    } else {
+        maritalAgreementFileNameDisplay.innerHTML = "";
+        maritalAgreementFileNameDisplay.classList.remove("has-file");
+    }
+}
+
+function clearFile() {
+    maritalAgreementFileInput.value = "";
+    displayFileInfo();
+}
+
+maritalAgreementFileInput.addEventListener("change", displayFileInfo);
 
 // ==============================
 // Initialisatie

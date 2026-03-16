@@ -228,6 +228,20 @@ Developers denken vaak dat standaard HTML-elementen te complex en lelijk zijn, d
 
 - [x] CSS to the rescue
 
+## Feedback (dag 9)
+
+### Positieve punten (+)
+
+- **Goeie styling**: De styling van de error messages is duidelijk en consistent.
+- **CSS Validatie**: Het gebruik van `:invalid` in CSS is een slimme manier om validatie te implementeren zonder JavaScript.
+- **Toegankelijkheid**: De toevoeging van `aria-describedby` verbetert de toegankelijkheid van het formulier aanzienlijk.
+
+### Verbeterpunten & Vragen (-)
+
+- **Vormgeving radiobuttons**: Zorg dat de legend bij de fieldset hetzelfde is als het label van de inputs.
+- **Asterix**: De asterisk bij required fields is nu een beetje onduidelijk. Overweeg om deze duidelijker te maken, bijvoorbeeld door een tooltip toe te voegen die uitlegt dat het veld verplicht is.
+- **Error messages**: Zorg dat de error messages ook duidelijk aangeven wat er mis is, bijvoorbeeld "Dit veld is verplicht" of "Voer een geldig BSN in".
+
 ## Bronvermelding AI (APA 7)
 
 Voor de implementatie van validatie waarbij alleen zichtbare velden `required` blijven, is AI-assistentie gebruikt in dit project.
