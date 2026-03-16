@@ -242,6 +242,20 @@ Developers denken vaak dat standaard HTML-elementen te complex en lelijk zijn, d
 - **Asterix**: De asterisk bij required fields is nu een beetje onduidelijk. Overweeg om deze duidelijker te maken, bijvoorbeeld door een tooltip toe te voegen die uitlegt dat het veld verplicht is.
 - **Error messages**: Zorg dat de error messages ook duidelijk aangeven wat er mis is, bijvoorbeeld "Dit veld is verplicht" of "Voer een geldig BSN in".
 
+## Dag 10
+### Wat heb ik gedaan vandaag?
+| Activiteit | Duur |
+|------------|------|
+| CSS verbeteringen en kleine bug fixes | 4 uur |
+| Testen met keyboard navigation en screenreaders | 2 uur |
+| Pauze | 1 uur |
+
+### Wat heb ik geleerd?
+* Hoe je een formulier test met alleen een keyboard en dat dit echt heel anders is dan met een muis
+
+### Wat ga ik morgen doen?
+- [x] CSS
+
 ## Bronvermelding AI (APA 7)
 
 Voor de implementatie van validatie waarbij alleen zichtbare velden `required` blijven, is AI-assistentie gebruikt in dit project.
