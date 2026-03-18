@@ -1,13 +1,13 @@
 ![Intro](readme_images/ns.png)
 
 > [!CAUTION]
-> DIT IS EEN SCHOOLPROJEC# Sprint 1
+> DIT IS EEN SCHOOLPROJECT
 
 ## Leerdoelen bij deze opdracht
 
 - CSS Animaties & Keyframes
     - Ik wil complexe CSS animaties en keyframes kunnen ontwerpen, zodat ik interactieve, duidelijke micro-interacties en state-changes kan bouwen.
-    - *Reden: Animaties verbeteren de gebruikerservaring en maken interfaces intu�tiever.*
+    - *Reden: Animaties verbeteren de gebruikerservaring en maken interfaces intutiever.*
 
 - Responsive & Semantiek
     - Ik wil een toegankelijke en responsive interface bouwen met semantische HTML, goede contrasten en duidelijke navigatie, zodat mijn projecten bruikbaar zijn op elk device.
