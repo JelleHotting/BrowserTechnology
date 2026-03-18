@@ -1,4 +1,4 @@
-![Intro](readme_images/NS.png)
+![Intro](readme_images/ns.png)
 
 > [!CAUTION]
 > DIT IS EEN SCHOOLPROJEC# Sprint 1
