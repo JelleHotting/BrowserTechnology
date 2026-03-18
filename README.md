@@ -1,24 +1,17 @@
-# BrowserTechnology
-Een schoolopdracht waar het doel is om een belastingformulier te maken in de huisstijl van NS
+![Intro](readme_images/NS.png)
 
 > [!CAUTION]
-> DIT IS EEN SCHOOLPROJECT
+> DIT IS EEN SCHOOLPROJEC# Sprint 1
 
-# Sprint 1
-
-## Leerdoelen 
-- Samenwerken met code
-    - Ik wil effectief samenwerken met Git (branches, pull requests en code reviews), zodat we veilig en duidelijk kunnen bouwen aan dezelfde codebase.
-    - *Reden: Dit is essentieel voor professionele softwareontwikkeling en teamwork.*
+## Leerdoelen bij deze opdracht
 
 - CSS Animaties & Keyframes
     - Ik wil complexe CSS animaties en keyframes kunnen ontwerpen, zodat ik interactieve, duidelijke micro-interacties en state-changes kan bouwen.
-    - *Reden: Animaties verbeteren de gebruikerservaring en maken interfaces intuïtiever.*
+    - *Reden: Animaties verbeteren de gebruikerservaring en maken interfaces intu�tiever.*
 
 - Responsive & Semantiek
     - Ik wil een toegankelijke en responsive interface bouwen met semantische HTML, goede contrasten en duidelijke navigatie, zodat mijn projecten bruikbaar zijn op elk device.
     - *Reden: Accessibility en responsiveness zorgen voor inclusieve, gebruiksvriendelijke websites.*
-
 
 ## Dag 1
 
@@ -41,7 +34,7 @@ Een schoolopdracht waar het doel is om een belastingformulier te maken in de hui
 * Hoe je kan checken of de datum in de toekomst ligt en dat je dit eigenlijk aan de server-side moet doen omdat mensen anders hun eigen datum kunnen manipuleren
 * Hoe `<fieldset>` werkt en dat deze altijd een `<legend>` moet hebben
 
-### Weekly Geek 
+### Weekly Geek
 
 [Link naar artikel](https://tonsky.me/blog/tahoe-icons/)
 
@@ -59,6 +52,7 @@ Slechte metaforen: Veel iconen zijn onbegrijpelijk of gebruiken hetzelfde symboo
 Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die erin zit, en ze zijn niet goed uitgelijnd op de pixels, waardoor ze wazig ogen.
 
 ![Onleesbaar](https://tonsky.me/blog/tahoe-icons/details_window@2x.webp?t=1769953823)
+
 ### Wat ga ik morgen doen?
 
 - [x] Progressive disclosure toevoegen
@@ -68,7 +62,7 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 
 ## Dag 2
 
-### Wat heb ik gedaan vandaag? 
+### Wat heb ik gedaan vandaag?
 
 | Activiteit | Duur |
 |------------|------|
@@ -76,7 +70,7 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 | Javascript toeveoegen voor progressive disclosure | 3,5 uur |
 | Pauze | 30 min |
 
-### Wat heb ik geleerd? 
+### Wat heb ik geleerd?
 
 * Hoe je een radiobutton styled door hem weg te halen en de styling op het label uit te voeren
 * Dat accessibility belangrijk is bij custom form controls :focus state etc
@@ -84,7 +78,7 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 ### Wat ga ik morgen doen?
 
 - [x] CSS (volgende opdracht)
-  
+
 ## Feedback (dag 3)
 
 ### Positieve punten (+)
@@ -101,10 +95,9 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 - **Prioritering**: Denk goed na over wat echt belangrijk is. Bijvoorbeeld: 'required' velden zijn essentieel voor de belasting/verwerking.
 - **Layout & UX**: Maak op desktop meer gebruik van de beschikbare ruimte. Stel velden die verplicht zijn alvast in als required. Hierdoor kun je de lay-out met Progressive Enhancement beter uitdenken.
 
+## Dag 4
 
-## Dag 4 
-
-### Wat heb ik gedaan vandaag? 
+### Wat heb ik gedaan vandaag?
 
 | Activiteit | Duur |
 |------------|------|
@@ -113,7 +106,7 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 | De * in de after gezet, dit was echt boem moeilijk | 1  uur |
 | Pauze | 1 uur |
 
-### Wat heb ik geleerd? 
+### Wat heb ik geleerd?
 
 * Hoe je een asteriks op de after van een label zet als de input ook in de label staat (dmv een span)
 * Validatie in HTML5 (waar mogelijk)
@@ -129,7 +122,7 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 
 ## Dag 5
 
-### Wat heb ik gedaan vandaag? 
+### Wat heb ik gedaan vandaag?
 
 | Activiteit | Duur |
 |------------|------|
@@ -137,7 +130,7 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 | Error handeling| 5  uur |
 | Ping-pong | 2 uur |
 
-### Wat heb ik geleerd? 
+### Wat heb ik geleerd?
 
 * Hoe je een div kan stylen als een textbox input
 * Hoe de elfproef werkt en hoe je deze kan implementeren in JavaScript
@@ -145,6 +138,7 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 * Hoe je een onzichtbaar veld in een formulier kan zetten en die niet required maken
 
 ### Wat ga ik moregn doen?
+
 - [x] CSS to the rescue
 
 ## Feedback (dag 6)
@@ -156,7 +150,7 @@ Technisch onleesbaar: De iconen zijn te klein voor de hoeveelheid detail die eri
 
 ### Verbeterpunten & Vragen (-)
 
-- **Datum**: Zorg dat je überhaupt geen datum uit de toekomst kan invoeren (input level).
+- **Datum**: Zorg dat je �berhaupt geen datum uit de toekomst kan invoeren (input level).
 - **BSN Validatie**: Maak de BSN validatie ook werkend in HTML (input level) en niet alleen in JavaScript.
 - **Volgende vraag**: Denk goed na of je de volgende vraag op een aparte HTML pagina wilt zetten of dat je deze op dezelfde pagina wilt houden.
 
@@ -206,9 +200,7 @@ Developers denken vaak dat standaard HTML-elementen te complex en lelijk zijn, d
 - We gebruiken labels als placeholders om ruimte te sparen
 - Zonder duidelijke `:focus` state is het **niet duidelijk** dat je het kan invullen
 
-
 **Lering:** Standaard HTML-elementen zien er "saai" uit, maar dat komt omdat ze **goed ontworpen zijn voor gebruikers**. Denk altijd twee keer voordat je dit weghalt.
-
 
 ## Dag 8
 
@@ -243,7 +235,9 @@ Developers denken vaak dat standaard HTML-elementen te complex en lelijk zijn, d
 - **Error messages**: Zorg dat de error messages ook duidelijk aangeven wat er mis is, bijvoorbeeld "Dit veld is verplicht" of "Voer een geldig BSN in".
 
 ## Dag 10
+
 ### Wat heb ik gedaan vandaag?
+
 | Activiteit | Duur |
 |------------|------|
 | CSS verbeteringen en kleine bug fixes | 4 uur |
@@ -251,16 +245,52 @@ Developers denken vaak dat standaard HTML-elementen te complex en lelijk zijn, d
 | Pauze | 1 uur |
 
 ### Wat heb ik geleerd?
+
 * Hoe je een formulier test met alleen een keyboard en dat dit echt heel anders is dan met een muis
 
 ### Wat ga ik morgen doen?
+
 - [x] CSS
 
-## Bronvermelding AI (APA 7)
+## Dag 11
 
-Voor de implementatie van validatie waarbij alleen zichtbare velden `required` blijven, is AI-assistentie gebruikt in dit project.
+### Wat heb ik gedaan vandaag?
+
+| Activiteit | Duur |
+|------------|------|
+| Nieuwe pagina toegevoegd aan het begin en einde | 2 uur |
+| Foutmeldingen verbeterd | 3 uur |
+| Pauze | 1 uur |
+
+### Wat heb ik geleerd?
+
+* Hoe je een formulier test met alleen een keyboard en dat dit echt heel anders is dan met een muis
+
+### Wat ga ik morgen doen?
+
+- [x] CSS
+
+### AI-gebruik
+
+- GitHub. (2026). *GitHub Copilot* [AI coding assistant]. https://github.com/features/copilot
+- Voor de implementatie van validatie waarbij alleen zichtbare velden `required` blijven, is AI-assistentie gebruikt in dit project.
 
 GitHub Copilot. (2026, 10 maart). Antwoorden op prompts over formuliervalidatie [Large language model output]. OpenAI.
+
+### Verantwoording AI-gebruik
+
+- GitHub Copilot is gebruikt als ondersteunend hulpmiddel voor.
+  - Helpen met code-structuur.
+  - Herformuleren van documentatie.
+  - Kleine code-ideen en debughints.
+  - Commit messages schrijven.
+
+### Verantwoording AI-gebruik
+- GitHub Copilot is gebruikt als ondersteunend hulpmiddel voor.
+  - Helpen met code-structuur.
+  - Herformuleren van documentatie.
+  - Kleine code-ideeën en debughints.
+  - Commit messages schrijven.
 
 
 
